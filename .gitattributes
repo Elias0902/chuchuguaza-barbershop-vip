@@ -1,0 +1,16 @@
+# Finales de línea LF en el repositorio para todo el texto (PHP, JS, CSS, SQL...).
+* text=auto eol=lf
+
+# Binarios: sin conversión
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.mp4 binary
+*.eot binary
+*.ttf binary
+*.woff binary
+*.woff2 binary
+*.phar binary
+*.pdf binary

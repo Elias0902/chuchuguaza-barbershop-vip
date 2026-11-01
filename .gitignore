@@ -1,0 +1,39 @@
+# Dependencias de Composer (se instalan con: php composer.phar install)
+/vendor/
+
+# Logs
+*.log
+*.log.*
+
+# Entorno (credenciales locales)
+.env
+.env.local
+.env.*.local
+
+# XAMPP / Desarrollo
+xampp/
+htdocs/
+cache/
+temp/
+cache_assets/
+assets/img/.thumbs/
+assets/img/*/_originales/
+
+# Fotos de perfil subidas por los usuarios (solo se versiona la imagen predeterminada)
+assets/img/perfiles/*
+!assets/img/perfiles/default.png
+!assets/img/perfiles/default.jpg
+
+# Archivos generados por la aplicación
+storage/*
+!storage/.gitkeep
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+Thumbs.db
+.DS_Store

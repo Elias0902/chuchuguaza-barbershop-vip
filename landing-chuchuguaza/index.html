@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Chuchuguaza Barbershop</title>
+<meta name="description" content="Chuchuguaza Barbershop VIP: 17 años transformando tu imagen. Cortes, diseños y cambios de look con barberos calificados. Agenda tu cita por WhatsApp.">
+<meta property="og:title" content="Chuchuguaza Barbershop VIP">
+<meta property="og:description" content="Tradición, estilo y excelencia desde 2009. Agenda tu cita por WhatsApp.">
+<meta property="og:image" content="img/logo-pasillo.jpg">
+<link rel="icon" href="img/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet">
+<style>
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+[hidden]{display:none!important}
+
+/* Layout: hero partido (texto + video vertical en marco de poste de barbero), bandas alternas azul/blanco, separadores con franjas de poste */
+:root{
+  --navy:#0a1838; --navy-2:#13254f; --navy-deep:#060f26;
+  --red:#d3202f; --red-2:#ef3b47;
+  --white:#ffffff; --bone:#f3f4f8; --ink:#0b142c; --muted:#56607a; --mist:#b9c1d6; --line:rgba(255,255,255,.12);
+  --wa:#1fae5b;
+  --display:'Big Shoulders Display','Arial Narrow',Impact,sans-serif;
+  --body:'DM Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --r:18px;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--navy);color:var(--white);font-family:var(--body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--navy-deep)}
+img,video{max-width:100%;display:block}
+a{color:inherit}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--display);font-weight:800;line-height:.95;margin:0;text-wrap:balance;letter-spacing:.01em;text-transform:uppercase}
+h2{font-size:clamp(40px,6vw,68px)}
+p{margin:0}
+.eyebrow{font-size:13px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--red-2)}
+:focus-visible{outline:3px solid var(--red-2);outline-offset:3px}
+
+/* Franja de poste de barbero */
+.pole{height:14px;background:repeating-linear-gradient(-45deg,var(--red) 0 14px,var(--white) 14px 28px,var(--navy-2) 28px 42px,var(--white) 42px 56px)}
+
+/* Botones */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;border-radius:999px;padding:16px 28px;font-weight:700;font-size:16px;text-decoration:none;border:0;transition:transform .15s ease,background .15s ease;min-height:52px}
+.btn:hover{transform:translateY(-2px)}
+.btn.wa{background:var(--wa);color:var(--white)}
+.btn.red{background:var(--red);color:var(--white)}
+.btn.red:hover{background:var(--red-2)}
+.btn.ghost{border:1.5px solid rgba(255,255,255,.45);color:var(--white);background:transparent}
+.btn.ghost-dark{border:1.5px solid var(--ink);color:var(--ink);background:transparent}
+.btn svg{flex:none}
+
+/* Header */
+header.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(6,15,38,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+header.nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;height:90px}
+.brand{display:flex;align-items:center;text-decoration:none;flex:none}
+.brand img{height:72px;width:auto;filter:drop-shadow(0 2px 6px rgba(0,0,0,.35));transition:transform .2s ease}
+.brand:hover img{transform:rotate(-3deg) scale(1.04)}
+.navlinks{display:flex;gap:26px;font-size:14px;color:var(--mist)}
+.navlinks a{text-decoration:none}.navlinks a:hover{color:var(--white)}
+.nav .btn{padding:10px 18px;min-height:42px;font-size:14px;white-space:nowrap}
+
+/* Hero */
+.hero{position:relative;overflow:hidden;background:var(--navy-deep)}
+.hero-bg{position:absolute;inset:-40px;background:url(video/hero-poster.jpg) center/cover;filter:blur(28px) saturate(1.2);opacity:.35}
+.hero-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--navy-deep) 15%,rgba(6,15,38,.55))}
+.hero .wrap{position:relative;display:grid;grid-template-columns:1.15fr .85fr;gap:56px;align-items:center;padding-block:72px 80px}
+.hero-copy{display:grid;gap:22px;min-width:0}
+.hero h1{font-size:clamp(64px,10vw,132px);line-height:.85}
+.hero h1 span{display:block;color:var(--red-2)}
+.tagline{font-family:var(--display);font-weight:700;font-size:clamp(22px,2.6vw,30px);text-transform:uppercase;letter-spacing:.04em;line-height:1.1}
+.tagline em{font-style:normal;color:var(--mist)}
+.hero .lead{font-size:18px;color:var(--mist);max-width:56ch}
+.hero .sub{font-size:19px;font-weight:500;color:var(--white);max-width:52ch}
+.cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:6px}
+.stamp{position:absolute;top:-26px;left:-26px;width:104px;height:104px;border-radius:50%;background:var(--red);display:grid;place-items:center;text-align:center;font-family:var(--display);font-weight:900;text-transform:uppercase;line-height:.9;transform:rotate(-12deg);box-shadow:0 10px 30px rgba(0,0,0,.4);z-index:3;border:3px solid var(--white)}
+.stamp b{font-size:38px;display:block}.stamp small{font-size:13px;letter-spacing:.06em}
+
+.frame{position:relative;justify-self:center;width:min(360px,100%)}
+.frame .poleside{position:absolute;inset:-12px;border-radius:30px;background:repeating-linear-gradient(-45deg,var(--red) 0 16px,var(--white) 16px 32px,var(--navy-2) 32px 48px,var(--white) 48px 64px);z-index:0}
+.frame .screen{position:relative;z-index:1;border-radius:22px;overflow:hidden;aspect-ratio:9/16;background:var(--navy-2);box-shadow:0 30px 60px rgba(0,0,0,.5)}
+.frame video{width:100%;height:100%;object-fit:cover}
+.soundbtn{position:absolute;right:14px;bottom:14px;z-index:2;width:46px;height:46px;border-radius:50%;border:0;background:rgba(6,15,38,.75);color:var(--white);display:grid;place-items:center;cursor:pointer}
+
+/* Datos rápidos */
+.facts{background:var(--navy)}
+.facts ul{list-style:none;margin:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;padding-block:34px}
+.facts li{display:grid;gap:4px;padding:6px 22px;border-left:1px solid var(--line)}
+.facts li:first-child{border-left:0;padding-left:0}
+.facts b{font-family:var(--display);font-size:40px;font-weight:900;line-height:1;color:var(--white);text-transform:uppercase}
+.facts span{color:var(--mist);font-size:14px}
+
+/* Secciones */
+section.band{padding-block:96px}
+.light{background:var(--bone);color:var(--ink)}
+.light .lead{color:var(--muted)}
+.head{display:grid;gap:14px;max-width:640px;margin-bottom:44px}
+.head .lead{font-size:18px;color:var(--mist)}
+
+/* Entrada: mosaico */
+.mosaic{display:grid;grid-template-columns:1.5fr 1fr;grid-template-rows:repeat(2,minmax(0,1fr));gap:16px;height:640px}
+.mosaic figure{margin:0;border-radius:var(--r);overflow:hidden;position:relative;min-height:0}
+.mosaic figure:first-child{grid-row:1/3}
+.mosaic img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease}
+.mosaic figure:hover img{transform:scale(1.04)}
+.mosaic figcaption{position:absolute;left:14px;bottom:14px;background:rgba(6,15,38,.8);color:var(--white);font-size:13px;font-weight:500;padding:6px 12px;border-radius:999px}
+.loc{display:flex;gap:16px 28px;flex-wrap:wrap;align-items:center;margin-top:28px;color:var(--mist)}
+.loc span{display:inline-flex;gap:8px;align-items:center}
+
+/* Servicios */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+.split .copy{display:grid;gap:20px;min-width:0}
+.split .copy p{font-size:18px;color:var(--muted);max-width:52ch}
+.checks{list-style:none;padding:0;margin:4px 0 0;display:grid;gap:12px}
+.checks li{display:flex;gap:12px;align-items:flex-start;font-weight:500}
+.checks svg{flex:none;margin-top:3px;color:var(--red)}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+.duo img{width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:var(--r)}
+.duo img:last-child{margin-top:56px}
+.light .btn.red{justify-self:start}
+
+/* Bebidas y productos */
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.card{background:var(--navy-2);border-radius:22px;overflow:hidden;display:grid;grid-template-rows:auto 1fr}
+.card img{width:100%;aspect-ratio:4/3;object-fit:cover}
+.card div{padding:24px 26px 28px;display:grid;gap:8px;align-content:start}
+.card h3{font-size:32px}
+.card p{color:var(--mist)}
+
+/* Cierre */
+.final{background:var(--red);position:relative;overflow:hidden}
+.final .wrap{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;padding-block:96px}
+.final .copy{display:grid;gap:20px;min-width:0}
+.final h2{color:var(--white)}
+.final p{font-size:19px;color:rgba(255,255,255,.9);max-width:46ch}
+.final .eyebrow{color:var(--white);opacity:.85}
+.final .btn.wa{background:var(--white);color:var(--ink)}
+.final .btn.wa svg{fill:var(--wa)}
+.logos{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.logos img{width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:var(--r);border:4px solid var(--white)}
+.logos img:first-child{transform:rotate(-3deg)}
+.logos img:last-child{transform:rotate(3deg) translateY(28px)}
+.contact{display:grid;gap:6px;font-size:15px;color:rgba(255,255,255,.9)}
+.contact b{font-size:12px;letter-spacing:.16em;text-transform:uppercase;opacity:.8}
+
+footer{background:var(--navy-deep);color:var(--mist);font-size:14px}
+/* Políticas de servicio (se cargan desde el sistema interno) */
+.policies{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start}
+.policy{background:var(--white);border:1px solid rgba(11,20,44,.08);border-radius:16px;box-shadow:0 6px 20px rgba(11,20,44,.06)}
+.policy summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 22px;cursor:pointer}
+.policy summary::-webkit-details-marker{display:none}
+.policy summary span{display:grid;gap:3px}
+.policy small{font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--red)}
+.policy b{font-size:18px;line-height:1.3;color:var(--ink)}
+.policy summary::after{content:"+";flex:none;font-size:26px;line-height:1;font-weight:700;color:var(--red);transition:transform .2s ease}
+.policy[open] summary::after{transform:rotate(45deg)}
+.policy p{padding:0 22px 20px;color:var(--muted);white-space:pre-line}
+.policy-date{margin-top:22px;font-size:13px;color:var(--muted)}
+.light .head .lead{color:var(--muted)}
+
+
+footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-block:28px 96px}
+footer .fbrand{display:flex;align-items:center;gap:14px}
+footer .fbrand img{height:44px;width:auto}
+footer b{font-family:var(--display);font-size:20px;color:var(--white);text-transform:uppercase;letter-spacing:.03em}
+
+.float{position:fixed;right:calc(18px + env(safe-area-inset-right,0px));bottom:calc(18px + env(safe-area-inset-bottom,0px));width:60px;height:60px;border-radius:50%;background:var(--wa);display:grid;place-items:center;box-shadow:0 10px 28px rgba(0,0,0,.35);z-index:40}
+
+@media (max-width:900px){
+  .navlinks{display:none}
+  /* En móvil el video es el fondo del banner */
+  .hero .wrap{grid-template-columns:1fr;padding-block:0;gap:0;min-height:min(86svh,760px);align-items:end}
+  .hero-bg{display:none}
+  .frame{position:absolute;inset:0;width:auto;justify-self:stretch}
+  .frame .poleside,.stamp{display:none}
+  .frame .screen{position:absolute;inset:0;border-radius:0;aspect-ratio:auto;box-shadow:none}
+  .frame .screen::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(6,15,38,.2) 0%,rgba(6,15,38,.55) 30%,rgba(6,15,38,.92) 60%,var(--navy-deep) 100%)}
+  .soundbtn{top:14px;bottom:auto;right:max(14px,env(safe-area-inset-right,0px))}
+  .hero-copy{position:relative;z-index:2;padding-block:240px 40px;order:2}
+  .brand img{height:58px}
+  header.nav .wrap{height:74px}
+  .hero .eyebrow{color:var(--white);text-shadow:0 1px 8px rgba(0,0,0,.6)}
+  .hero .lead{font-size:16px}
+  .hero .sub{font-size:17px}
+  .facts ul{grid-template-columns:repeat(2,minmax(0,1fr));gap:22px 0}
+  .facts li:nth-child(3){border-left:0;padding-left:0}
+  section.band{padding-block:64px}
+  .mosaic{grid-template-columns:1fr 1fr;grid-template-rows:auto auto;height:auto}
+  .mosaic figure:first-child{grid-column:1/3;grid-row:auto;aspect-ratio:4/3}
+  .mosaic figure{aspect-ratio:3/4}
+  .split,.final .wrap{grid-template-columns:1fr;gap:40px}
+  .cards,.policies{grid-template-columns:1fr}
+  .final .wrap{padding-block:64px 80px}
+}
+@media (max-width:480px){
+  .cta .btn{width:100%}
+  .duo img:last-child{margin-top:32px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#inicio" aria-label="Chuchuguaza Barbershop VIP, inicio"><img src="img/logo.png" alt="Chuchuguaza Barbershop VIP" width="480" height="370"></a>
+    <nav class="navlinks" aria-label="Principal">
+      <a href="#local">El local</a>
+      <a href="#servicios">Servicios</a>
+      <a href="#extras">Bebidas y productos</a>
+      <a href="#politicas" id="navPoliticas" hidden>Políticas</a>
+    </nav>
+    <a class="btn ghost" href="../index.php?url=autenticator&amp;action=acceso_interno">Entrar al sistema</a>
+  </div>
+</header>
+
+<main>
+  <!-- 1. HERO -->
+  <section class="hero" id="inicio">
+    <div class="hero-bg" aria-hidden="true"></div>
+    <div class="wrap">
+      <div class="hero-copy">
+        <span class="eyebrow">Barbershop VIP · Desde 2009</span>
+        <h1>Chuchu<span>guaza</span></h1>
+        <p class="tagline">Tradición, estilo <em>y excelencia</em></p>
+        <p class="sub">17 años de experiencia transformando tu imagen con los mejores profesionales.</p>
+        <p class="lead">¿Quieres hacerte cualquier estilo, cambio de look o diseño que tengas en mente? Aquí lo hacemos realidad de manera profesional. Contamos con barberos altamente calificados, servicio de primera y un área de bebidas para que disfrutes al máximo tu visita. ¡Te esperamos para renovar tu corte!</p>
+        <div class="cta">
+          <a class="btn wa" data-wa href="#">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm4.5 12.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2s.2-1.1.2-1.2-.2-.2-.5-.3z"/></svg>
+            Agendar cita por WhatsApp
+          </a>
+          <a class="btn ghost" href="#local">Conoce el local</a>
+          <a class="btn ghost" href="../index.php?url=autenticator&amp;action=acceso_interno">Acceso del equipo</a>
+        </div>
+      </div>
+
+      <div class="frame">
+        <div class="poleside" aria-hidden="true"></div>
+        <div class="stamp" aria-hidden="true"><div><b>17</b><small>años</small></div></div>
+        <div class="screen">
+          <video id="heroVideo" src="video/hero.mp4" poster="video/hero-poster.jpg" autoplay muted loop playsinline preload="auto" aria-label="Recorrido por la barbería Chuchuguaza"></video>
+          <button class="soundbtn" id="pauseBtn" type="button" aria-label="Pausar video">
+            <svg id="icoPause" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+            <svg id="icoPlay" hidden width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="pole" aria-hidden="true"></div>
+
+  <div class="facts">
+    <div class="wrap">
+      <ul>
+        <li><b>17 años</b><span>de trayectoria, desde 2009</span></li>
+        <li><b>VIP</b><span>Barberos altamente calificados</span></li>
+        <li><b>Bar</b><span>Cervezas y bebidas mientras esperas</span></li>
+        <li><b>4,5 ★</b><span>152 reseñas en Google</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 2. ENTRADA Y UBICACIÓN -->
+  <section class="band" id="local">
+    <div class="wrap">
+      <div class="head">
+        <span class="eyebrow">Nuestra entrada</span>
+        <h2>¡Te damos la bienvenida a Chuchuguaza!</h2>
+        <p class="lead">Ubícanos fácilmente y ven a vivir la experiencia desde el primer momento en que llegas a nuestro local.</p>
+      </div>
+      <div class="mosaic">
+        <figure><img src="img/entrada.jpg" alt="Fachada de Chuchuguaza Barbershop con el logo en la vidriera" loading="lazy"><figcaption>La entrada principal</figcaption></figure>
+        <figure><img src="img/entrada-lejos.jpg" alt="Vista de la calle con la fachada de la barbería" loading="lazy"><figcaption>Así nos ves desde la calle</figcaption></figure>
+        <figure><img src="img/entrada-detalle.jpg" alt="Detalle de la vidriera con el logo Barbershop VIP" loading="lazy"><figcaption>Busca el logo VIP</figcaption></figure>
+      </div>
+      <div class="loc">
+        <span id="dirRow" hidden><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg><span id="dirText"></span></span>
+        <span id="horRow" hidden><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span id="horText"></span></span>
+        <a class="btn ghost" id="mapBtn" hidden href="#" target="_blank" rel="noopener">Cómo llegar</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. SERVICIOS -->
+  <section class="band light" id="servicios">
+    <div class="wrap split">
+      <div class="duo">
+        <img src="img/corte-dama.jpg" alt="Clienta con diseño de corte y color azul" loading="lazy">
+        <img src="img/barbero.jpg" alt="Barbero revisando un corte en el espejo" loading="lazy">
+      </div>
+      <div class="copy">
+        <span class="eyebrow">Servicios y estilos</span>
+        <h2>Profesionales en cada detalle</h2>
+        <p>No importa el estilo o lo que quieras hacerte; realizamos cortes de cabello para todos con la mayor precisión y dedicación. Contamos con 17 años de trayectoria respaldando nuestro trabajo impecable.</p>
+        <ul class="checks">
+          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>Cortes para caballeros, damas y niños</li>
+          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>Diseños, color y cambios de look</li>
+          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>Trae tu referencia y la hacemos realidad</li>
+        </ul>
+        <a class="btn red" data-wa href="#">Quiero mi corte</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. BEBIDAS Y PRODUCTOS -->
+  <section class="band" id="extras">
+    <div class="wrap">
+      <div class="head">
+        <span class="eyebrow">Relájate y disfruta</span>
+        <h2>Mucho más que una barbería</h2>
+        <p class="lead">Disfruta de una buena bebida mientras te atiendes, y descubre nuestra selección de productos profesionales para mantener tu estilo intacto en casa.</p>
+      </div>
+      <div class="cards">
+        <article class="card">
+          <img src="img/bebidas.jpg" alt="Nevera con cervezas frías de la barbería" loading="lazy">
+          <div><h3>Bebidas frías</h3><p>Cervezas y más, bien frías, para que la espera se disfrute.</p></div>
+        </article>
+        <article class="card">
+          <img src="img/productos.jpg" alt="Exhibidor de productos profesionales de cuidado y estilismo" loading="lazy">
+          <div><h3>Productos profesionales</h3><p>Ceras, sprays y cuidado del cabello y la barba para llevar a casa.</p></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. POLÍTICAS DE SERVICIO (se editan en el sistema: Página pública → Políticas de servicio) -->
+  <section class="band light" id="politicas" hidden>
+    <div class="wrap">
+      <div class="head">
+        <span class="eyebrow">Para que todo salga perfecto</span>
+        <h2>Políticas de servicio</h2>
+        <p class="lead">Así trabajamos para atenderte bien, a tiempo y con la calidad de siempre.</p>
+      </div>
+      <div class="policies" id="policyList"></div>
+      <p class="policy-date" id="policyDate"></p>
+    </div>
+  </section>
+
+  <!-- 6. CIERRE -->
+  <div class="pole" aria-hidden="true"></div>
+  <section class="final" id="agenda">
+    <div class="wrap">
+      <div class="copy">
+        <span class="eyebrow">Tu barbero de confianza</span>
+        <h2>Agenda tu cita hoy mismo</h2>
+        <p>17 años de experiencia nos convierten en tu mejor opción. Escríbenos directamente por WhatsApp para agendar con tu barbero de confianza.</p>
+        <div class="cta">
+          <a class="btn wa" data-wa href="#">
+            <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm4.5 12.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2s.2-1.1.2-1.2-.2-.2-.5-.3z"/></svg>
+            Agendar por WhatsApp
+          </a>
+        </div>
+        <div class="contact">
+          <b>WhatsApp</b><span id="phoneText"></span>
+          <b style="margin-top:10px">Dirección</b><span id="dirFinal"></span>
+          <span id="igWrap" hidden><b>Instagram</b><br><a id="igLink" href="#" target="_blank" rel="noopener"></a></span>
+        </div>
+      </div>
+      <div class="logos">
+        <img src="img/logo-entrada.jpg" alt="Logo iluminado de Chuchuguaza en la entrada" loading="lazy">
+        <img src="img/logo-pasillo.jpg" alt="Logo Chuchuguaza Barbershop VIP desde 2009 al final del pasillo" loading="lazy">
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="fbrand"><img src="img/logo.png" alt="" width="480" height="370"><span><b>Chuchuguaza</b> · Barbershop VIP · © <span id="year"></span></span></div>
+    <small>Web por eliasarmas.dev</small>
+  </div>
+</footer>
+
+<a class="float" data-wa href="#" aria-label="Escribir a Chuchuguaza por WhatsApp">
+  <svg width="30" height="30" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2s.2-1.1.2-1.2-.2-.2-.5-.3z"/></svg>
+</a>
+
+<script>
+/* ============================================================
+   DATOS DEL NEGOCIO: cambia aquí y todo se actualiza solo
+   ============================================================ */
+const NEGOCIO = {
+  whatsapp: "584265514525",   // solo números con 58 delante
+  telefonoVisible: "0426-551 4525",
+  instagram: "",           // ej. "chuchuguaza" (sin @). Vacío = se oculta
+  direccion: "Calle 6, Barquisimeto, Lara (3J3J+JWM)",
+  mapa: "https://maps.app.goo.gl/6C5qWdgSMUTwaC3i7",
+  horario: "Abierto de 9:00 a. m. a 8:00 p. m.",
+  mensaje: "Hola Chuchuguaza, vi su página web y quiero agendar una cita con el barbero."
+};
+
+/* ============================================================ */
+const $ = s => document.querySelector(s);
+const waLink = "https://wa.me/" + NEGOCIO.whatsapp + "?text=" + encodeURIComponent(NEGOCIO.mensaje);
+document.querySelectorAll("[data-wa]").forEach(a => { a.href = waLink; a.target = "_blank"; a.rel = "noopener"; });
+$("#phoneText").textContent = NEGOCIO.telefonoVisible || "Escríbenos y te respondemos";
+$("#year").textContent = new Date().getFullYear();
+if (NEGOCIO.direccion) { $("#dirRow").hidden = false; $("#dirText").textContent = NEGOCIO.direccion; $("#dirFinal").textContent = NEGOCIO.direccion; }
+if (NEGOCIO.horario) { $("#horRow").hidden = false; $("#horText").textContent = NEGOCIO.horario; }
+if (NEGOCIO.mapa) { $("#mapBtn").hidden = false; $("#mapBtn").href = NEGOCIO.mapa; }
+if (NEGOCIO.instagram) { $("#igWrap").hidden = false; $("#igLink").href = "https://instagram.com/" + NEGOCIO.instagram; $("#igLink").textContent = "@" + NEGOCIO.instagram; }
+
+// Políticas de servicio: se leen del sistema; si no hay o falla la carga, la sección queda oculta
+fetch("../index.php?url=publico&action=politicas", { headers: { Accept: "application/json" } })
+  .then(r => r.ok ? r.json() : null)
+  .then(res => {
+    const lista = res && res.ok ? res.datos : [];
+    if (!lista.length) return;
+    const cont = $("#policyList");
+    lista.forEach(p => {
+      const item = document.createElement("details");
+      item.className = "policy";
+      const resumen = document.createElement("summary");
+      const textos = document.createElement("span");
+      const cat = document.createElement("small"); cat.textContent = p.categoria;
+      const tit = document.createElement("b"); tit.textContent = p.titulo;
+      textos.append(cat, tit); resumen.append(textos);
+      const texto = document.createElement("p"); texto.textContent = p.contenido;
+      item.append(resumen, texto); cont.append(item);
+    });
+    const ultima = lista.map(p => p.fecha_actualizacion || "").sort().pop();
+    if (ultima) { const [a, m, d] = ultima.slice(0, 10).split("-"); $("#policyDate").textContent = "Última actualización: " + d + "/" + m + "/" + a; }
+    $("#politicas").hidden = false; $("#navPoliticas").hidden = false;
+  })
+  .catch(() => {});
+
+// Video del banner: pausa/reproduce y respeta "reducir movimiento"
+const v = $("#heroVideo"), pb = $("#pauseBtn");
+const setIcon = () => { const p = v.paused; $("#icoPause").hidden = p; $("#icoPlay").hidden = !p; pb.setAttribute("aria-label", p ? "Reproducir video" : "Pausar video"); };
+if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) { v.removeAttribute("autoplay"); v.pause(); }
+v.addEventListener("play", setIcon); v.addEventListener("pause", setIcon);
+pb.onclick = () => { v.paused ? v.play().catch(() => {}) : v.pause(); };
+setIcon();
+</script>
+</body>
+</html>
