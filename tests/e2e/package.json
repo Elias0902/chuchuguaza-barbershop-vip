@@ -1,0 +1,16 @@
+{
+  "name": "chuchuguaza-pruebas-e2e",
+  "private": true,
+  "description": "Pruebas de punta a punta con Selenium: registrar, modificar y eliminar en cada módulo del panel.",
+  "type": "module",
+  "scripts": {
+    "test": "node --test --test-concurrency=1 --test-reporter=spec",
+    "modulo": "node --test --test-concurrency=1 --test-reporter=spec --test-name-pattern"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "selenium-webdriver": "^4.52.0"
+  }
+}
