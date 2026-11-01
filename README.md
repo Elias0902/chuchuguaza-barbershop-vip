@@ -72,6 +72,7 @@ php bd/negocioBD/semillas/datos_prueba.php --vaciar VACIAR
 │   └── img/perfiles/         # Fotos de perfil subidas
 ├── bd/                       # Respaldos SQL de las dos bases
 ├── landing-chuchuguaza/      # Landing pública
+├── tests/e2e/                # Pruebas con Selenium (Node), aparte de la aplicación
 └── vendor/                   # Composer (setasign/fpdf)
 ```
 
@@ -175,8 +176,47 @@ Nadie escribe en el buzón: el **motor de análisis** (`App\Models\Analisis\Moto
 
 El botón de sol o luna de la barra superior cambia el tema del panel y lo recuerda en el navegador. Si nunca se eligió, se usa el del sistema operativo. Todos los colores salen de variables CSS en `assets/css/panel.css` (`:root` para el oscuro y `[data-tema="claro"]` para el claro), y el tema se aplica antes de pintar la página para que no parpadee.
 
+## Pruebas automáticas con Selenium
+
+En `tests/e2e/` hay pruebas de punta a punta que abren el navegador, inician sesión y, en **cada módulo**, hacen **registrar → modificar → eliminar** (eliminación lógica, comprobando que el registro pase a *Eliminados*). Están escritas en JavaScript con `selenium-webdriver` y el ejecutor de pruebas que trae Node, aparte del código PHP: Composer sigue siendo solo para los PDF.
+
+**Preparación (una sola vez)**, con Node 20 o superior y Chrome o Edge instalados:
+
+```bash
+cd tests/e2e
+npm install
+```
+
+Copia `tests/e2e/.env.example` como `tests/e2e/.env` y escribe el usuario y la contraseña de un usuario con rol Administrador. Ese archivo no se sube al repositorio. El driver del navegador lo descarga Selenium solo la primera vez.
+
+**Ejecutar** (con XAMPP encendido y los datos de prueba cargados):
+
+```bash
+npm test
+```
+
+Para correr un solo módulo, por el nombre de su prueba:
+
+```bash
+npm run modulo -- "Clientes"
+```
+
+Opciones en `.env`: `NAVEGADOR=edge` para usar Edge, `OCULTO=1` para correr sin ventana y `PAUSA_MS=500` para ir más lento y seguir los pasos con la vista. Si un paso falla, los siguientes del mismo módulo se omiten y queda una captura de pantalla en `tests/e2e/capturas/`.
+
+| Archivo | Qué prueba |
+|---|---|
+| `01-catalogos` | Clientes, barberos, servicios, categorías, productos, promociones y métodos de pago |
+| `02-atencion` | Citas, tickets (con detalle y precio automático) y pagos (monto con el saldo del ticket) |
+| `03-finanzas` | Cierres de caja, gastos, retiros (con desglose) y nómina |
+| `04-academia` | Cursos e inscripciones (elige un curso y un cliente sin inscripción activa) |
+| `05-pagina-y-seguridad` | Políticas de servicio, usuarios, roles y que la bitácora registre esas operaciones |
+| `06-analisis-y-cuenta` | Buzón (analizar, marcar leída, descartar, reabrir), análisis de ventas, inicio, modo claro/oscuro y Mi perfil |
+
+La estructura sigue el patrón *Page Object*: `lib/panel.js` sabe manejar el panel (iniciar sesión, llenar formularios, buscar en la tabla, confirmar) y cada prueba solo describe los datos del módulo.
+
+**Datos que dejan las pruebas:** los registros llevan «Selenium» en el nombre y quedan como eliminados (eliminación lógica), así que no aparecen en las listas de activos. La prueba de cierres de caja cierra la caja abierta del día y al final deja abierta una nueva. Conviene correrlas sobre los datos de prueba, no sobre los reales.
+
 ## Pendiente
 
 - Permisos por usuario (excepciones sobre su rol) con la tabla `permisos_usuario`.
 - Recuperación de contraseña por correo.
-- Pruebas automatizadas.
