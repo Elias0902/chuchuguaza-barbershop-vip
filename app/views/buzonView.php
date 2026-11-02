@@ -117,6 +117,7 @@ $vacios = [
           <?php endif; ?>
         </section>
       </main>
+      <?php require __DIR__ . '/partials/firma.php'; ?>
     </div>
   </div>
   <script src="<?= Vista::asset('assets/js/panel.js') ?>"></script>

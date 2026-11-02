@@ -80,3 +80,30 @@ input::placeholder { color: #8993ad; }
 .links .back { margin-top: 0; }
 .notice.ok { border-color: rgba(70,190,120,.4); background: rgba(40,160,90,.14); color: #d5f2e0; }
 .hint { margin: 6px 0 0; color: #8993ad; font-size: 13px; }
+
+/* ---------- Sello de autoría ---------- */
+.firma { display: grid; justify-items: center; gap: 10px; margin-top: 26px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,.1); color: #8993ad; font-size: 12.5px; text-align: center; }
+.firma a { color: inherit; text-decoration: none; }
+.firma a:hover { color: #fff; }
+.firma-autor { display: inline-flex; align-items: center; gap: 10px; }
+.firma-autor strong { color: #b9c1d6; }
+.firma-sello { display: inline-grid; width: 30px; height: 30px; place-items: center; border: 1.5px solid #ef3b47; border-radius: 50%; color: #ef3b47; font-size: 10.5px; font-weight: 700; transform: rotate(-8deg); }
+.firma-legal { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 14px; }
+
+/* ---------- Páginas legales ---------- */
+.legal-page { place-items: start center; }
+.card.legal { width: min(100%, 820px); }
+.legal-brand { display: block; width: 130px; margin: 0 auto 22px; }
+.legal-brand img { width: 100%; height: auto; }
+.legal-tabs { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 26px; padding: 4px; border: 1px solid rgba(255,255,255,.12); border-radius: 12px; }
+.legal-tabs a { padding: 8px 12px; border-radius: 9px; color: #b9c1d6; font-size: 13px; font-weight: 600; text-decoration: none; }
+.legal-tabs a:hover { color: #fff; }
+.legal-tabs a[aria-current="page"] { background: rgba(211,32,47,.2); color: #fff; }
+.legal h2 { margin: 26px 0 8px; font-size: 17px; }
+.legal p, .legal li { color: #b9c1d6; font-size: 14.5px; line-height: 1.7; }
+.legal strong { color: #fff; }
+.legal a { color: #ff8a92; }
+.legal-date { margin-top: 4px; color: #8993ad !important; font-size: 13px !important; }
+.legal-seal { display: flex; align-items: center; gap: 16px; margin: 20px 0; padding: 18px; border: 1px dashed rgba(239,59,71,.45); border-radius: 14px; }
+.legal-seal-mark { display: grid; width: 58px; height: 58px; flex: none; place-items: center; border: 2px solid #ef3b47; border-radius: 50%; color: #ef3b47; font-size: 18px; font-weight: 700; transform: rotate(-8deg); }
+.legal-seal div { display: grid; gap: 2px; }

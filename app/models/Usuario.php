@@ -30,6 +30,11 @@ class Usuario extends CrudModel
                 'etiqueta' => 'Rol', 'tipo' => 'relacion', 'requerido' => true,
                 'relacion' => ['tabla' => 'roles', 'clave' => 'id_rol', 'texto' => 'nombre_rol', 'bd' => self::SEGURIDAD],
             ],
+            'cedula_barbero' => [
+                'etiqueta' => 'Barbero vinculado', 'tipo' => 'relacion',
+                'ayuda' => 'Solo para cuentas de barberos: verán y registrarán únicamente sus propios tickets y citas.',
+                'relacion' => ['tabla' => 'barberos', 'clave' => 'cedula', 'claveTexto' => true, 'texto' => "CONCAT(nombre, ' ', apellido)"],
+            ],
             'password_usuario' => [
                 'etiqueta' => 'Contraseña', 'tipo' => 'clave', 'requerido' => 'registro', 'max' => 72,
                 'ayuda' => 'Mínimo 8 caracteres con letras y números. Al modificar, déjala vacía para conservar la actual.',
@@ -44,7 +49,7 @@ class Usuario extends CrudModel
 
     protected function sqlConsulta(): string
     {
-        return 'SELECT u.id_usuario, u.nombre_usuario, u.email_usuario, u.id_rol_usuario, u.avatar, u.ultimo_acceso,
+        return 'SELECT u.id_usuario, u.nombre_usuario, u.email_usuario, u.id_rol_usuario, u.cedula_barbero, u.avatar, u.ultimo_acceso,
                     u.fecha_registro, u.status, r.nombre_rol,
                     IF(u.bloqueado_hasta IS NOT NULL AND u.bloqueado_hasta > NOW(), 1, 0) AS bloqueado
                 FROM usuarios u

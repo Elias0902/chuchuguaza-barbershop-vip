@@ -51,6 +51,7 @@ CREATE TABLE usuarios (
     email_usuario VARCHAR(100) NOT NULL,
     email_verificado INT(11) NOT NULL DEFAULT 0,
     id_rol_usuario INT(11) NOT NULL,
+    cedula_barbero VARCHAR(15) DEFAULT NULL,
     avatar VARCHAR(100) NOT NULL DEFAULT 'Assets/img/default.PNG',
     ultimo_acceso DATETIME(6) DEFAULT NULL,
     fecha_registro DATETIME(6) DEFAULT NULL,

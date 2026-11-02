@@ -3,6 +3,13 @@
     "description": "Sistema de gestión interna de Chuchuguaza Barbershop (PHP MVC con PDO).",
     "type": "project",
     "license": "proprietary",
+    "authors": [
+        {
+            "name": "Elias Armas",
+            "homepage": "https://eliasarmas.dev",
+            "role": "Autor"
+        }
+    ],
     "require": {
         "php": ">=8.1",
         "ext-fileinfo": "*",

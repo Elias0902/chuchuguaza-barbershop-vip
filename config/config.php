@@ -32,6 +32,12 @@ function env(string $clave, string $porDefecto = ''): string
 // ── Aplicación ─────────────────────────────────────────────────────────────
 define('APP_NOMBRE', env('APP_NOMBRE', 'Chuchuguaza Barbershop'));
 define('MONEDA_SIMBOLO', env('MONEDA_SIMBOLO', '$'));
+
+// Autoría del sistema: se muestra en el pie del panel, en los PDF y en las páginas legales.
+define('APP_AUTOR', 'Elias Armas');
+define('APP_AUTOR_WEB', 'eliasarmas.dev');
+define('APP_VERSION', '1.0');
+define('LEGAL_ACTUALIZACION', '02/11/2026');
 date_default_timezone_set(env('ZONA_HORARIA', 'America/Caracas'));
 
 // ── Base de datos del negocio ──────────────────────────────────────────────

@@ -78,6 +78,11 @@ return [
     'roles' => [
         'Con el botón «Permisos» marcas qué puede consultar, registrar, modificar o eliminar el rol en cada módulo.',
     ],
+    'respaldos' => [
+        'El sistema respalda solo las dos bases de datos cada 24 horas; con «Respaldar ahora» haces uno cuando quieras.',
+        'Descarga un respaldo de vez en cuando y guárdalo fuera de esta computadora (pendrive o la nube).',
+        'Restaurar devuelve la base a la fecha del respaldo; antes el sistema guarda otro respaldo del estado actual.',
+    ],
     'bitacora' => [
         'Aquí queda registrado quién hizo cada operación y cuándo. Solo se puede consultar.',
     ],

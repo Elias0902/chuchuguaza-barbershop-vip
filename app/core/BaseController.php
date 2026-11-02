@@ -3,6 +3,7 @@
 namespace App\Core;
 
 use App\Models\Buzon;
+use App\Models\Respaldo;
 use RuntimeException;
 use Throwable;
 
@@ -49,6 +50,7 @@ abstract class BaseController
             throw new RuntimeException("No existe la vista $vista.");
         }
 
+        $this->respaldoAutomatico();
         $autorizacion = new Autorizacion();
         $permisos = $autorizacion->permisosUsuario();
         $datos += [
@@ -108,6 +110,19 @@ abstract class BaseController
             error_log('No se pudo revisar el buzón de sugerencias: ' . $e->getMessage());
 
             return 0;
+        }
+    }
+
+    /** Respaldo automático: al mostrar una página se revisa si ya pasaron las horas del último. */
+    private function respaldoAutomatico(): void
+    {
+        if ($this->usuario() === null) {
+            return;
+        }
+        try {
+            (new Respaldo())->automaticoSiCorresponde($this->idUsuario());
+        } catch (Throwable $e) {
+            error_log('No se pudo hacer el respaldo automático: ' . $e->getMessage());
         }
     }
 

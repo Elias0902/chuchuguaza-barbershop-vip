@@ -4,9 +4,26 @@ use App\Helpers\Vista;
 
 /**
  * Menú lateral generado desde config/modulos.php.
+ * Arriba van los módulos del negocio; abajo, aparte, Configuración (con el manual de usuario)
+ * y Ayuda. El manual y la ayuda los ve cualquier usuario con sesión.
  * @var array $menu
  * @var string $activePage
  */
+$enlaceMenu = static function (string $ruta, string $titulo, string $icono, string $activePage): string {
+    $activo = $activePage === $ruta;
+
+    return '<a class="sidebar-link' . ($activo ? ' active' : '') . '" href="index.php?url=' . Vista::e($ruta) . '"' . ($activo ? ' aria-current="page"' : '') . '>'
+        . '<i class="fas ' . Vista::e($icono) . ' sidebar-icon" aria-hidden="true"></i><span>' . Vista::e($titulo) . '</span></a>';
+};
+$grupoMenu = static function (string $clave, string $titulo, string $enlaces, bool $activo): string {
+    return '<section class="sidebar-group' . ($activo ? ' has-active' : '') . '" data-grupo="' . Vista::e($clave) . '">'
+        . '<button class="sidebar-group-toggle" type="button" aria-expanded="true" aria-controls="grupo-' . Vista::e($clave) . '">'
+        . '<span>' . Vista::e($titulo) . '</span><i class="fas fa-chevron-down" aria-hidden="true"></i></button>'
+        . '<div class="sidebar-group-links" id="grupo-' . Vista::e($clave) . '">' . $enlaces . '</div></section>';
+};
+
+$gruposNegocio = array_filter($menu, static fn(array $g): bool => empty($g['aparte']));
+$configuracion = $menu['seguridad'] ?? ['titulo' => 'Configuración', 'modulos' => []];
 ?>
 <button class="menu-overlay" type="button" aria-label="Cerrar menú" data-menu-close></button>
 <aside class="sidebar" id="panel-sidebar" aria-label="Menú principal">
@@ -16,26 +33,27 @@ use App\Helpers\Vista;
   </a>
 
   <nav class="sidebar-nav" aria-label="Módulos del sistema">
-    <a class="sidebar-link<?= $activePage === 'dashboard' ? ' active' : '' ?>" href="index.php?url=dashboard"<?= $activePage === 'dashboard' ? ' aria-current="page"' : '' ?>>
-      <i class="fas fa-home sidebar-icon" aria-hidden="true"></i><span>Inicio</span>
-    </a>
-
-    <?php foreach ($menu as $claveGrupo => $grupoMenu): ?>
-      <?php $grupoActivo = isset($grupoMenu['modulos'][$activePage]); ?>
-      <section class="sidebar-group<?= $grupoActivo ? ' has-active' : '' ?>" data-grupo="<?= Vista::e($claveGrupo) ?>">
-        <button class="sidebar-group-toggle" type="button" aria-expanded="true" aria-controls="grupo-<?= Vista::e($claveGrupo) ?>">
-          <span><?= Vista::e($grupoMenu['titulo']) ?></span>
-          <i class="fas fa-chevron-down" aria-hidden="true"></i>
-        </button>
-        <div class="sidebar-group-links" id="grupo-<?= Vista::e($claveGrupo) ?>">
-          <?php foreach ($grupoMenu['modulos'] as $rutaMenu => $itemMenu): ?>
-            <?php $activo = $activePage === $rutaMenu; ?>
-            <a class="sidebar-link<?= $activo ? ' active' : '' ?>" href="index.php?url=<?= Vista::e($rutaMenu) ?>"<?= $activo ? ' aria-current="page"' : '' ?>>
-              <i class="fas <?= Vista::e($itemMenu['icono']) ?> sidebar-icon" aria-hidden="true"></i><span><?= Vista::e($itemMenu['titulo']) ?></span>
-            </a>
-          <?php endforeach; ?>
-        </div>
-      </section>
+    <?= $enlaceMenu('dashboard', 'Inicio', 'fa-home', $activePage) ?>
+    <?php foreach ($gruposNegocio as $claveGrupo => $grupo): ?>
+      <?php
+        $enlaces = '';
+        foreach ($grupo['modulos'] as $ruta => $item) {
+            $enlaces .= $enlaceMenu($ruta, $item['titulo'], $item['icono'], $activePage);
+        }
+        echo $grupoMenu($claveGrupo, $grupo['titulo'], $enlaces, isset($grupo['modulos'][$activePage]));
+      ?>
     <?php endforeach; ?>
+  </nav>
+
+  <nav class="sidebar-nav sidebar-bottom" aria-label="Configuración y ayuda">
+    <?php
+      $enlaces = '';
+      foreach ($configuracion['modulos'] as $ruta => $item) {
+          $enlaces .= $enlaceMenu($ruta, $item['titulo'], $item['icono'], $activePage);
+      }
+      $enlaces .= $enlaceMenu('manual', 'Manual de usuario', 'fa-book', $activePage);
+      echo $grupoMenu('seguridad', $configuracion['titulo'], $enlaces, isset($configuracion['modulos'][$activePage]) || $activePage === 'manual');
+      echo $grupoMenu('ayuda', 'Ayuda', $enlaceMenu('ayuda', 'Centro de ayuda', 'fa-life-ring', $activePage), $activePage === 'ayuda');
+    ?>
   </nav>
 </aside>

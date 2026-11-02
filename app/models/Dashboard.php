@@ -28,7 +28,36 @@ class Dashboard extends BaseModel
         return $fila ?: [];
     }
 
-    public function proximasCitas(int $limite = 6): array
+    /**
+     * Resumen de un barbero vinculado: sus cortes de hoy y de esta semana (desde el lunes)
+     * y la comisión estimada por los servicios de la semana.
+     */
+    public function resumenBarbero(string $cedula): array
+    {
+        $stmt = $this->negocio()->prepare(
+            "SELECT b.nombre, b.porcentaje_comision,
+                (SELECT COUNT(*) FROM ticket_atencion t WHERE t.cedula_barbero = b.cedula AND t.status = 1 AND DATE(t.fecha_ticket) = CURDATE()) AS cortes_hoy,
+                (SELECT COUNT(*) FROM ticket_atencion t WHERE t.cedula_barbero = b.cedula AND t.status = 1
+                    AND t.fecha_ticket >= DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY)) AS cortes_semana,
+                (SELECT COALESCE(SUM(d.cantidad * d.precio_unitario), 0) FROM detalle_atencion d
+                    INNER JOIN ticket_atencion t ON t.id_ticket = d.id_ticket
+                    WHERE t.cedula_barbero = b.cedula AND t.status = 1 AND d.id_servicio IS NOT NULL
+                      AND t.fecha_ticket >= DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY)) AS servicios_semana,
+                (SELECT COUNT(*) FROM citas c WHERE c.cedula_barbero = b.cedula AND c.status = 1 AND c.estado_cita = 'Pendiente'
+                    AND DATE(c.fecha_cita) = CURDATE()) AS citas_hoy
+             FROM barberos b WHERE b.cedula = :cedula"
+        );
+        $stmt->execute([':cedula' => $cedula]);
+        $fila = $stmt->fetch();
+        if (!$fila) {
+            return [];
+        }
+        $fila['comision_semana'] = round((float) $fila['servicios_semana'] * (float) $fila['porcentaje_comision'] / 100, 2);
+
+        return $fila;
+    }
+
+    public function proximasCitas(int $limite = 6, ?string $cedulaBarbero = null): array
     {
         $stmt = $this->negocio()->prepare(
             "SELECT ci.id_cita, ci.fecha_cita, CONCAT(c.nombre, ' ', c.apellido) AS cliente, CONCAT(b.nombre, ' ', b.apellido) AS barbero
@@ -36,10 +65,13 @@ class Dashboard extends BaseModel
              LEFT JOIN cliente c ON c.id_cliente = ci.id_cliente
              LEFT JOIN barberos b ON b.cedula = ci.cedula_barbero
              WHERE ci.status = 1 AND ci.estado_cita = 'Pendiente' AND ci.fecha_cita >= NOW()
+               AND (:barbero IS NULL OR ci.cedula_barbero = :barbero2)
              ORDER BY ci.fecha_cita
              LIMIT :limite"
         );
         $stmt->bindValue(':limite', $limite, PDO::PARAM_INT);
+        $stmt->bindValue(':barbero', $cedulaBarbero);
+        $stmt->bindValue(':barbero2', $cedulaBarbero);
         $stmt->execute();
 
         return $stmt->fetchAll();

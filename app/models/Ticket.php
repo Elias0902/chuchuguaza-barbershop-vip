@@ -15,6 +15,8 @@ class Ticket extends CrudModel
 {
     public const ESTADOS_PAGO = ['Pendiente', 'Pagado', 'Anulado'];
 
+    use SoloSusRegistros;
+
     protected string $tabla = 'ticket_atencion';
     protected string $clave = 'id_ticket';
     protected string $modulo = 'Tickets de atención';
@@ -66,13 +68,14 @@ class Ticket extends CrudModel
                 LEFT JOIN barberos b ON b.cedula = t.cedula_barbero
                 LEFT JOIN (SELECT id_ticket, SUM(monto) AS pagado FROM pagos WHERE status = 1 GROUP BY id_ticket) pg
                        ON pg.id_ticket = t.id_ticket
+                WHERE {$this->condicionBarbero('t')}
                 ORDER BY t.status DESC, t.fecha_ticket DESC";
     }
 
     /** Agrega al registro sus líneas con el formato del formulario ("s:3" servicio, "p:5" producto). */
     public function obtener(int|string $id): ?array
     {
-        $ticket = parent::obtener($id);
+        $ticket = $this->verificarDueno(parent::obtener($id));
         if ($ticket === null) {
             return null;
         }
@@ -109,6 +112,7 @@ class Ticket extends CrudModel
 
     protected function reglasNegocio(array &$datos, array $entrada, ?array $actual): void
     {
+        $this->asignarBarbero($datos);
         $lineas = $this->limpiarDetalles('detalles', $entrada['detalles'] ?? null);
         $anteriores = $actual !== null ? $this->lineasGuardadas((int) $actual['id_ticket']) : [];
 

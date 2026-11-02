@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Core\Autorizacion;
 use App\Core\CrudController;
 use App\Core\CrudModel;
 use App\Models\Pago;
@@ -39,6 +40,8 @@ class TicketsController extends CrudController
     {
         return [
             'buscarNumero' => ['etiqueta' => 'N.º de ticket'],
+            // Un barbero vinculado ya tiene su nombre puesto en el formulario.
+            'defectos' => ['cedula_barbero' => (new Autorizacion())->barberoSesion()],
             'opciones' => ['metodos' => (new Pago())->opcionesCampo('id_metodo')],
             'acciones' => [
                 [

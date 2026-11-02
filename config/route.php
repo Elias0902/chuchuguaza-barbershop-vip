@@ -6,6 +6,7 @@
  */
 
 use App\Controllers\AnalisisController;
+use App\Controllers\AyudaController;
 use App\Controllers\AutenticatorController;
 use App\Controllers\BarberosController;
 use App\Controllers\BitacoraController;
@@ -18,6 +19,8 @@ use App\Controllers\CursosController;
 use App\Controllers\DashboardController;
 use App\Controllers\GastosController;
 use App\Controllers\InscripcionesController;
+use App\Controllers\LegalController;
+use App\Controllers\ManualController;
 use App\Controllers\MetodosPagoController;
 use App\Controllers\NominaController;
 use App\Controllers\PagosController;
@@ -26,6 +29,7 @@ use App\Controllers\PoliticasController;
 use App\Controllers\ProductosController;
 use App\Controllers\PromocionesController;
 use App\Controllers\PublicoController;
+use App\Controllers\RespaldosController;
 use App\Controllers\RetirosController;
 use App\Controllers\RolesController;
 use App\Controllers\ServiciosController;
@@ -74,4 +78,8 @@ return [
     'usuarios' => UsuariosController::class,
     'roles' => RolesController::class,
     'bitacora' => BitacoraController::class,
+    'respaldos' => RespaldosController::class,
+    'manual' => ManualController::class,
+    'ayuda' => AyudaController::class,
+    'legal' => LegalController::class,
 ];
