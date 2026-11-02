@@ -9,6 +9,7 @@ use App\Helpers\Vista;
 <meta name="theme-color" content="#060f26">
 <meta name="author" content="<?= Vista::e(APP_AUTOR . " · " . APP_AUTOR_WEB) ?>">
 <meta name="csrf-token" content="<?= Vista::e($csrf ?? '') ?>">
+<meta name="inactividad" content="<?= (int) INACTIVIDAD_SEGUNDOS ?>">
 <script>
   // Tema antes de pintar: el guardado por el usuario o, si no hay, el del sistema operativo.
   (function () {

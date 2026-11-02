@@ -2,6 +2,8 @@
 
 namespace App\Core;
 
+use App\Models\Autenticator;
+
 /**
  * Controlador frontal: toda petición entra por index.php y se despacha aquí.
  *
@@ -21,7 +23,7 @@ final class FrontController
     {
         $url = (string) ($_GET['url'] ?? '');
         $accion = (string) ($_GET['action'] ?? '');
-        $autenticado = !empty($_SESSION['s_usuario']['id_usuario']);
+        $autenticado = !empty($_SESSION['s_usuario']['id_usuario']) && $this->sesionVigente();
 
         if ($url === '') {
             $this->redirigir($autenticado ? 'index.php?url=dashboard' : self::LANDING);
@@ -56,6 +58,31 @@ final class FrontController
         }
 
         $controlador->ejecutar($accion);
+    }
+
+    /**
+     * Cierre por inactividad: si pasó más de INACTIVIDAD_SEGUNDOS desde la última petición,
+     * la sesión se destruye aunque el navegador siga abierto. Cada petición renueva el plazo
+     * (el panel solo hace peticiones de «sigo aquí» cuando la persona usa el ratón o el teclado).
+     */
+    private function sesionVigente(): bool
+    {
+        $ultima = (int) ($_SESSION['ultima_actividad'] ?? time());
+        if (time() - $ultima <= INACTIVIDAD_SEGUNDOS) {
+            $_SESSION['ultima_actividad'] = time();
+
+            return true;
+        }
+
+        $usuario = $_SESSION['s_usuario'] ?? [];
+        $_SESSION = [];
+        session_regenerate_id(true);
+        $_SESSION['mensaje_acceso_interno'] = 'Tu sesión se cerró por ' . intdiv(INACTIVIDAD_SEGUNDOS, 60) . ' minutos sin actividad. Vuelve a iniciar sesión.';
+        if (!empty($usuario['id_usuario'])) {
+            (new Autenticator())->registrarCierreSesion((int) $usuario['id_usuario'], (string) ($usuario['nombre_usuario'] ?? ''), 'inactividad');
+        }
+
+        return false;
     }
 
     /** Sin permiso: JSON 403 para las peticiones fetch y la página 403 para el resto. */

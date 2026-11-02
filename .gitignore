@@ -37,3 +37,6 @@ storage/*
 # OS
 Thumbs.db
 .DS_Store
+
+# Usuarios y contraseñas locales para entrar al sistema
+credenciales-locales.txt

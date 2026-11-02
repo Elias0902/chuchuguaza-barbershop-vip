@@ -1,0 +1,28 @@
+INFORME DE PRUEBAS DE SEGURIDAD · CHUCHUGUAZA
+Fecha: 2/11/2026, 2:31:26 p. m.   Sistema: http://localhost/chuchuguaza-barber-shop
+Resultado: 21 de 21 pruebas superadas
+
+[OK]    Acceso · sin sesión, los módulos responden 401 y no devuelven datos
+[OK]    Inyección SQL · login con payloads clásicos no deja entrar
+          6 payloads rechazados
+[OK]    Sesión · el administrador de pruebas inicia sesión
+[OK]    Sesión · la cookie de sesión es HttpOnly y SameSite y cambia al iniciar sesión
+[OK]    Inyección SQL · parámetros id con SQL no filtran datos ni dan error 500
+          28 combinaciones rechazadas
+[OK]    Inyección SQL · campos de formulario con SQL se guardan como texto, sin ejecutarse
+[OK]    XSS · el HTML guardado se devuelve como texto y la vista nunca usa innerHTML
+[OK]    XSS · parámetros reflejados en la URL se escapan
+[OK]    CSRF · registrar, eliminar y restaurar sin token CSRF se rechazan (403)
+[OK]    CSRF · las acciones de escritura no se aceptan por GET
+[OK]    Archivos · la descarga de respaldos no permite salir de su carpeta
+[OK]    Archivos · archivos sensibles no son accesibles desde la web
+[OK]    Roles · el barbero no entra a módulos ajenos ni ve tickets de otros
+[OK]    Roles · un usuario no puede darse permisos ni cambiarse el rol a sí mismo
+[OK]    Cabeceras · cabeceras de seguridad presentes
+[OK]    Fuerza bruta · tras 3 contraseñas erróneas la cuenta se bloquea, aunque luego se use la correcta
+          La cuenta de prueba quedó bloqueada 30 min (el script la desbloquea al final)
+[OK]    Recuperar contraseña · no revela si un usuario existe y el token no se puede adivinar
+[OK]    2FA · el administrador no entra solo con la contraseña
+[OK]    2FA · un código usado no sirve otra vez
+[OK]    Sesión · volver a «Entrar al sistema» con la sesión abierta la cierra y pide la clave
+[OK]    Sesión · la sesión se cierra tras 2 minutos sin actividad

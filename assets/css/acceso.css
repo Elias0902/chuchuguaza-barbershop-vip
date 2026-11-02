@@ -107,3 +107,9 @@ input::placeholder { color: #8993ad; }
 .legal-seal { display: flex; align-items: center; gap: 16px; margin: 20px 0; padding: 18px; border: 1px dashed rgba(239,59,71,.45); border-radius: 14px; }
 .legal-seal-mark { display: grid; width: 58px; height: 58px; flex: none; place-items: center; border: 2px solid #ef3b47; border-radius: 50%; color: #ef3b47; font-size: 18px; font-weight: 700; transform: rotate(-8deg); }
 .legal-seal div { display: grid; gap: 2px; }
+
+/* ---------- Verificación en dos pasos ---------- */
+.code-input { font-size: 26px; font-weight: 700; letter-spacing: .5em; text-align: center; }
+.resend { margin-top: 14px; text-align: center; }
+.link-button { border: 0; background: none; color: #b9c1d6; font: inherit; font-size: 14px; text-decoration: underline; cursor: pointer; }
+.link-button:hover { color: #fff; }

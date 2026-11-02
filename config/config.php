@@ -56,6 +56,16 @@ define('DB_PASS_SECURITY', env('DB_PASS_SECURITY', ''));
 define('MAX_INTENTOS_LOGIN', 3);
 define('BLOQUEO_MINUTOS_LOGIN', 30);
 
+// ── Cierre de sesión por inactividad ───────────────────────────────────────
+// Sin mover el ratón ni teclear en este tiempo, la sesión se cierra (el aviso sale 20 s antes).
+define('INACTIVIDAD_SEGUNDOS', (int) env('INACTIVIDAD_SEGUNDOS', '120'));
+
+// ── Verificación en dos pasos (2FA) ─────────────────────────────────────────
+// Estos roles, además de la contraseña, deben escribir un código de 6 dígitos que llega a su correo.
+define('DOSFA_ROLES', ['Administrador']);
+define('DOSFA_MINUTOS', 10);
+define('DOSFA_MAX_INTENTOS', 5);
+
 // ── Correo (recuperación de contraseña) ────────────────────────────────────
 // Sin SMTP_HOST los correos no se envían: se guardan en storage/correos para revisarlos.
 define('APP_URL', rtrim(env('APP_URL', 'http://localhost/chuchuguaza-barber-shop'), '/'));
