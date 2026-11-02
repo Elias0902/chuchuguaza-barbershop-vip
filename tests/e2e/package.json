@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "test": "node --test --test-concurrency=1 --test-reporter=spec",
+    "capturas-ayuda": "node capturas-ayuda.js",
     "modulo": "node --test --test-concurrency=1 --test-reporter=spec --test-name-pattern"
   },
   "engines": {

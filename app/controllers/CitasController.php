@@ -21,6 +21,7 @@ class CitasController extends CrudController
     protected function columnas(): array
     {
         return [
+            ['campo' => 'id_cita', 'etiqueta' => 'N.º', 'formato' => 'numero'],
             ['campo' => 'fecha_cita', 'etiqueta' => 'Fecha y hora', 'formato' => 'fechahora'],
             ['campo' => 'cliente', 'etiqueta' => 'Cliente', 'sub' => 'telefono_cliente'],
             ['campo' => 'barbero', 'etiqueta' => 'Barbero'],
@@ -35,6 +36,7 @@ class CitasController extends CrudController
     protected function configuracionVista(): array
     {
         return [
+            'buscarNumero' => ['etiqueta' => 'N.º de cita'],
             'acciones' => [
                 ['clave' => 'completar', 'etiqueta' => 'Completar', 'icono' => 'fa-check', 'si' => ['estado_cita' => 'Pendiente'],
                     'confirmar' => '¿Marcar la cita como completada?'],

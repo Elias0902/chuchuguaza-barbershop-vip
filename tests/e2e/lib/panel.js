@@ -207,7 +207,9 @@ export class Panel {
         await this.llenarDetalles(modal, valor);
         continue;
       }
-      await this.ponerValor(await this.esperar(By.css(`form [name="${campo}"]`), modal), valor);
+      // Los controles compuestos (días de clase) guardan su valor en un input oculto.
+      const oculto = await modal.findElements(By.css(`form input[type="hidden"][name="${campo}"]`));
+      await this.ponerValor(oculto[0] ?? await this.esperar(By.css(`form [name="${campo}"]`), modal), valor);
     }
   }
 
@@ -228,6 +230,23 @@ export class Panel {
     const etiqueta = await elemento.getTagName();
     const tipo = (await elemento.getAttribute('type')) || '';
     if (etiqueta === 'select') return this.elegir(elemento, valor);
+    if (tipo === 'hidden') {
+      // Días de clase: valor 'Lunes, Miércoles' → marca esas casillas del selector de días.
+      const dias = String(valor).split(',').map((d) => d.trim());
+      for (const casilla of await elemento.findElements(By.xpath('./ancestor::div[contains(@class,"day-picker")]//input[@type="checkbox"]'))) {
+        if ((await casilla.isSelected()) !== dias.includes(await casilla.getAttribute('value'))) {
+          await this.clic(await casilla.findElement(By.xpath('./parent::label')));
+        }
+      }
+      return;
+    }
+    const grupoCedula = await elemento.findElements(By.xpath('./preceding-sibling::select[contains(@class,"cedula-prefijo")]'));
+    if (grupoCedula.length) {
+      // Cédula: 'V-12345678' → nacionalidad en el select y los dígitos en el campo.
+      const [, letra, numero] = String(valor).match(/^([VE])-?(\d+)$/i);
+      await this.elegir(grupoCedula[0], letra.toUpperCase());
+      return this.escribir(elemento, numero);
+    }
     if (tipo === 'checkbox') {
       if ((await elemento.isSelected()) !== Boolean(valor)) await this.clic(elemento);
       return;

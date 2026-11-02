@@ -28,4 +28,14 @@ class CursosController extends CrudController
             ['campo' => 'inscritos', 'etiqueta' => 'Inscritos', 'formato' => 'entero'],
         ];
     }
+
+    protected function configuracionVista(): array
+    {
+        return [
+            'filtros' => [
+                ['campo' => 'dias_imparte', 'etiqueta' => 'Día', 'contiene' => true,
+                    'opciones' => ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo']],
+            ],
+        ];
+    }
 }

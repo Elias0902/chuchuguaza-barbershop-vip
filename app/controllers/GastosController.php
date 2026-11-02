@@ -22,6 +22,7 @@ class GastosController extends CrudController
     protected function columnas(): array
     {
         return [
+            ['campo' => 'id_gasto', 'etiqueta' => 'N.º', 'formato' => 'numero'],
             ['campo' => 'fecha_gasto', 'etiqueta' => 'Fecha', 'formato' => 'fechahora'],
             ['campo' => 'descripcion', 'etiqueta' => 'Descripción'],
             ['campo' => 'caja', 'etiqueta' => 'Caja'],
@@ -31,6 +32,9 @@ class GastosController extends CrudController
 
     protected function configuracionVista(): array
     {
-        return ['defectos' => ['id_cierre' => (new CierreCaja())->idCajaAbierta()]];
+        return [
+            'buscarNumero' => ['etiqueta' => 'N.º de gasto'],
+            'defectos' => ['id_cierre' => (new CierreCaja())->idCajaAbierta()],
+        ];
     }
 }

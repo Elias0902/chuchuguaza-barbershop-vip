@@ -1,0 +1,82 @@
+:root {
+  color-scheme: dark;
+  font-family: 'DM Sans', system-ui, sans-serif;
+  color: #fff;
+  background: #060f26;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+* { box-sizing: border-box; }
+body {
+  min-height: 100vh;
+  min-height: 100svh;
+  margin: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background:
+    linear-gradient(135deg, rgba(6, 15, 38, .92), rgba(10, 24, 56, .78)),
+    url("../../landing-chuchuguaza/img/entrada.jpg") center / cover fixed;
+}
+a { color: inherit; }
+.card {
+  width: min(100%, 430px);
+  padding: clamp(28px, 7vw, 48px);
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 22px;
+  background: rgba(6, 15, 38, .93);
+  box-shadow: 0 24px 80px rgba(0,0,0,.4);
+  backdrop-filter: blur(14px);
+}
+.brand { display: grid; justify-items: center; gap: 18px; margin-bottom: 32px; text-align: center; }
+.brand img { width: 168px; height: auto; }
+.eyebrow { color: #ef3b47; font-size: 12px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; }
+h1 { margin: 0; font-size: clamp(28px, 8vw, 36px); line-height: 1.1; }
+.intro { margin: 10px 0 0; color: #b9c1d6; font-size: 15px; line-height: 1.6; }
+.notice {
+  margin: 0 0 24px;
+  padding: 14px 16px;
+  border: 1px solid rgba(239,59,71,.34);
+  border-radius: 12px;
+  background: rgba(211,32,47,.12);
+  color: #f4d6d9;
+  font-size: 14px;
+  line-height: 1.55;
+}
+.field { display: grid; gap: 8px; margin-top: 18px; }
+label { color: #e8ebf3; font-size: 14px; font-weight: 600; }
+input {
+  width: 100%;
+  min-height: 48px;
+  padding: 0 14px;
+  border: 1px solid rgba(255,255,255,.18);
+  border-radius: 10px;
+  outline: none;
+  background: #0a1838;
+  color: #fff;
+  font: inherit;
+}
+input:focus { border-color: #ef3b47; box-shadow: 0 0 0 3px rgba(239,59,71,.16); }
+input::placeholder { color: #8993ad; }
+.submit {
+  width: 100%;
+  min-height: 48px;
+  margin-top: 24px;
+  border: 0;
+  border-radius: 10px;
+  background: #d3202f;
+  color: #fff;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+.submit:hover { background: #ef3b47; }
+.back { display: block; margin-top: 24px; color: #b9c1d6; font-size: 14px; text-align: center; text-decoration: none; }
+.back:hover { color: #fff; }
+:focus-visible { outline: 3px solid #ef3b47; outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; } }
+.links { display: flex; justify-content: center; gap: 18px; flex-wrap: wrap; margin-top: 24px; }
+.links .back { margin-top: 0; }
+.notice.ok { border-color: rgba(70,190,120,.4); background: rgba(40,160,90,.14); color: #d5f2e0; }
+.hint { margin: 6px 0 0; color: #8993ad; font-size: 13px; }

@@ -14,7 +14,7 @@ describe('Academia', () => {
     const nombre = `Curso Selenium ${unico()}`;
     await probarCrud(t, panel, {
       ruta: 'cursos',
-      nuevo: { nombre_curso: nombre, costo: 30, dias_imparte: 'Sábados', horario: '9:00 am a 11:00 am', descripcion: 'Curso creado por la prueba automática.' },
+      nuevo: { nombre_curso: nombre, costo: 30, dias_imparte: 'Sábado', horario: '9:00 am a 11:00 am', descripcion: 'Curso creado por la prueba automática.' },
       buscar: nombre,
       modificar: { costo: 35 },
       despuesDeModificar: '35,00',

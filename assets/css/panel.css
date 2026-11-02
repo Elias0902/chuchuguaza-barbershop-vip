@@ -36,6 +36,9 @@
   /* Marca */
   --rojo: #d3202f;
   --rojo-hover: #ef3b47;
+  --rojo-oscuro: #7a1220;
+  /* Rojo de alerta: se mantiene en los dos temas (eliminar, avisos nuevos). */
+  --peligro: #d3202f;
   --rojo-claro: #ef5964;
   --acento-bg: rgba(211, 32, 47, .18);
   --acento-borde: rgba(239, 59, 71, .25);
@@ -91,11 +94,15 @@
   --texto-3: #66718d;
   --etiqueta: #1f2a45;
   --caption: #7d88a3;
-  --rojo-claro: #d3202f;
-  --acento-bg: rgba(211, 32, 47, .09);
-  --acento-borde: rgba(211, 32, 47, .25);
-  --acento-texto: #c41d2b;
-  --serie: #d3202f;
+  /* En claro la marca es azul marino; el rojo queda solo como alerta. */
+  --rojo: #1d3f8f;
+  --rojo-hover: #2a56b8;
+  --rojo-oscuro: #0b1a3d;
+  --rojo-claro: #1f5fbf;
+  --acento-bg: rgba(31, 95, 191, .1);
+  --acento-borde: rgba(31, 95, 191, .28);
+  --acento-texto: #1d3f8f;
+  --serie: #1f5fbf;
   --sec-bg: #eef1f7;
   --sec-bg-hover: #e2e7f1;
   --sec-texto: #1a2440;
@@ -179,7 +186,7 @@ button, input, select, textarea { font: inherit; }
 .profile-chevron { color: var(--texto-3); font-size: 10px; }
 .avatar {
   display: inline-grid; flex: none; place-items: center; overflow: hidden; border-radius: 50%;
-  background: linear-gradient(135deg, var(--rojo), #7a1220); color: #fff; font-weight: 700;
+  background: linear-gradient(135deg, var(--rojo), var(--rojo-oscuro)); color: #fff; font-weight: 700;
 }
 .avatar img { width: 100%; height: 100%; object-fit: cover; }
 .avatar-sm { width: 34px; height: 34px; font-size: 12px; }
@@ -224,7 +231,7 @@ h1 i { color: var(--rojo-claro); font-size: .75em; }
 .btn-secondary { border-color: var(--borde-fuerte); background: var(--sec-bg); color: var(--sec-texto); }
 .btn-secondary:hover { background: var(--sec-bg-hover); }
 .btn-danger { background: #a3121f; }
-.btn-danger:hover { background: var(--rojo); }
+.btn-danger:hover { background: var(--peligro); }
 .icon-button { display: inline-grid; width: 34px; height: 34px; place-items: center; border: 1px solid var(--borde-fuerte); border-radius: 9px; background: transparent; color: var(--texto-2); cursor: pointer; }
 .icon-button:hover:not(:disabled) { border-color: var(--acento-borde); color: var(--texto-fuerte); }
 .icon-button:disabled { cursor: default; opacity: .35; }
@@ -325,6 +332,7 @@ h1 i { color: var(--rojo-claro); font-size: .75em; }
 .perm-module i { width: 16px; color: var(--texto-3); text-align: center; }
 .perm-toggle { padding: 4px 8px; border: 1px solid transparent; border-radius: 7px; background: none; color: var(--texto-3); font: inherit; font-size: 10.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; cursor: pointer; }
 .perm-toggle:hover { border-color: var(--borde-fuerte); color: var(--texto-fuerte); }
+.perm-table td.perm-diff { background: color-mix(in srgb, var(--rojo) 16%, transparent); box-shadow: inset 0 0 0 1px var(--rojo); }
 .perm-table .icon-button { width: 28px; height: 28px; font-size: 11px; }
 
 /* Notificaciones */
@@ -422,7 +430,7 @@ a.stat:hover { border-color: var(--acento-borde); transform: translateY(-2px); }
 
 /* Ícono del buzón en la barra superior */
 .inbox-button { position: relative; text-decoration: none; }
-.inbox-badge { position: absolute; top: -5px; right: -5px; display: grid; min-width: 19px; height: 19px; place-items: center; padding: 0 5px; border: 2px solid var(--fondo); border-radius: 10px; background: var(--rojo); color: #fff; font-size: 10px; font-weight: 700; line-height: 1; }
+.inbox-badge { position: absolute; top: -5px; right: -5px; display: grid; min-width: 19px; height: 19px; place-items: center; padding: 0 5px; border: 2px solid var(--fondo); border-radius: 10px; background: var(--peligro); color: #fff; font-size: 10px; font-weight: 700; line-height: 1; }
 
 /* ---------- Mi perfil ---------- */
 .profile-layout { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 18px; align-items: start; }
@@ -477,3 +485,37 @@ a.stat:hover { border-color: var(--acento-borde); transform: translateY(-2px); }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
 }
+
+/* ---------- Cédula (V/E + número) y días de clase ---------- */
+.cedula-group { display: flex; gap: 8px; }
+.cedula-group .cedula-prefijo { flex: 0 0 72px; }
+.cedula-group input { flex: 1; min-width: 0; }
+.day-picker { display: flex; flex-wrap: wrap; gap: 8px; }
+.day-chip { position: relative; cursor: pointer; }
+.day-chip input { position: absolute; opacity: 0; pointer-events: none; }
+.day-chip span { display: inline-grid; min-width: 54px; min-height: 40px; place-items: center; padding: 0 12px; border: 1px solid var(--borde-fuerte); border-radius: 10px; color: var(--texto-2); font-size: 13px; font-weight: 600; transition: background .15s, border-color .15s, color .15s; }
+.day-chip:hover span { border-color: var(--rojo-claro); color: var(--texto-fuerte); }
+.day-chip input:checked + span { border-color: var(--rojo); background: var(--rojo); color: #fff; }
+.day-chip input:focus-visible + span { outline: 3px solid var(--rojo-claro); outline-offset: 2px; }
+.day-chip input:disabled + span { cursor: default; opacity: .75; }
+
+/* ---------- Filtros rápidos de la barra (número, curso, alumno, día) ---------- */
+.quick-filters { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.quick-filters select, .quick-filters input { min-height: 40px; padding: 0 12px; border: 1px solid var(--borde-fuerte); border-radius: 10px; background: var(--campo-bg); color: var(--texto); }
+.quick-filters input { width: 180px; }
+.quick-filters select { max-width: 220px; }
+
+/* ---------- Ayuda asistida ---------- */
+.help-button { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--acento-borde); background: var(--acento-bg); color: var(--acento-texto); font-size: 14px; }
+.help-button:hover { background: var(--rojo); border-color: var(--rojo); color: #fff; }
+.help-manual { display: grid; gap: 18px; }
+.help-intro { margin: 0; color: var(--texto-2); font-size: 14px; line-height: 1.6; }
+.help-step { padding: 16px 18px; border: 1px solid var(--borde); border-radius: 12px; background: var(--hover-suave); }
+.help-step h3 { display: flex; align-items: center; gap: 10px; margin: 0 0 10px; color: var(--texto-fuerte); font-size: 15px; }
+.help-step h3 i { width: 18px; color: var(--rojo-claro); text-align: center; }
+.help-step p, .help-step li { color: var(--texto-2); font-size: 13.5px; line-height: 1.6; }
+.help-step p { margin: 0; }
+.help-step ul { margin: 0; padding-left: 20px; }
+.help-shot { margin: 14px 0 0; }
+.help-shot img { display: block; width: 100%; height: auto; border: 1px solid var(--borde-fuerte); border-radius: 10px; }
+.help-shot figcaption { margin-top: 6px; color: var(--caption); font-size: 12px; text-align: center; }

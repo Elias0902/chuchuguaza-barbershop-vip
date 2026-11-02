@@ -22,6 +22,7 @@ class RetirosController extends CrudController
     protected function columnas(): array
     {
         return [
+            ['campo' => 'id_retiro', 'etiqueta' => 'N.º', 'formato' => 'numero'],
             ['campo' => 'fecha_retiro', 'etiqueta' => 'Fecha', 'formato' => 'fechahora'],
             ['campo' => 'barbero', 'etiqueta' => 'Retirado por'],
             ['campo' => 'desglose', 'etiqueta' => 'Desglose'],
@@ -32,6 +33,9 @@ class RetirosController extends CrudController
 
     protected function configuracionVista(): array
     {
-        return ['defectos' => ['id_cierre' => (new CierreCaja())->idCajaAbierta()]];
+        return [
+            'buscarNumero' => ['etiqueta' => 'N.º de retiro'],
+            'defectos' => ['id_cierre' => (new CierreCaja())->idCajaAbierta()],
+        ];
     }
 }

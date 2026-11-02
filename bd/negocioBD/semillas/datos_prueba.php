@@ -312,8 +312,8 @@ $aviso("$citas citas (pasadas y de la próxima semana)");
 
 // ---------------------------------------------------------------- academia
 $cursos = [
-    (new Curso())->registrar(['nombre_curso' => 'Barbería básica', 'costo' => '120.00', 'dias_imparte' => 'Lunes y miércoles', 'horario' => '2:00 pm a 5:00 pm', 'descripcion' => 'Herramientas, higiene, cortes clásicos y atención al cliente.']),
-    (new Curso())->registrar(['nombre_curso' => 'Degradados y diseños', 'costo' => '80.00', 'dias_imparte' => 'Sábados', 'horario' => '9:00 am a 12:00 pm', 'descripcion' => 'Fades, transiciones y diseños con máquina.']),
+    (new Curso())->registrar(['nombre_curso' => 'Barbería básica', 'costo' => '120.00', 'dias_imparte' => 'Lunes, Miércoles', 'horario' => '2:00 pm a 5:00 pm', 'descripcion' => 'Herramientas, higiene, cortes clásicos y atención al cliente.']),
+    (new Curso())->registrar(['nombre_curso' => 'Degradados y diseños', 'costo' => '80.00', 'dias_imparte' => 'Sábado', 'horario' => '9:00 am a 12:00 pm', 'descripcion' => 'Fades, transiciones y diseños con máquina.']),
     (new Curso())->registrar(['nombre_curso' => 'Perfilado de barba', 'costo' => '50.00', 'dias_imparte' => 'Martes', 'horario' => '3:00 pm a 5:00 pm', 'descripcion' => 'Arreglo, perfilado y cuidado de la barba.']),
 ];
 $alumnos = array_slice(array_keys($activos), 6, 9);

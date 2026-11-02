@@ -21,6 +21,7 @@ class NominaController extends CrudController
     protected function columnas(): array
     {
         return [
+            ['campo' => 'id_nomina', 'etiqueta' => 'N.º', 'formato' => 'numero'],
             ['campo' => 'barbero', 'etiqueta' => 'Barbero', 'sub' => 'cedula_barbero'],
             ['campo' => 'fecha_inicio', 'etiqueta' => 'Desde', 'formato' => 'fecha'],
             ['campo' => 'fecha_cierre', 'etiqueta' => 'Hasta', 'formato' => 'fecha'],
@@ -35,6 +36,7 @@ class NominaController extends CrudController
     protected function configuracionVista(): array
     {
         return [
+            'buscarNumero' => ['etiqueta' => 'N.º de nómina'],
             'edicionSi' => ['estado_pago' => 'Pendiente'],
             'acciones' => [
                 ['clave' => 'pagar', 'etiqueta' => 'Marcar pagada', 'icono' => 'fa-check', 'si' => ['estado_pago' => 'Pendiente'],

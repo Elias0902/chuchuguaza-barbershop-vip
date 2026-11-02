@@ -152,10 +152,32 @@ abstract class CrudController extends BaseController
                 'edicionSi' => $config['edicionSi'] ?? null,
                 'permisos' => $permisos,
                 'scripts' => $config['scripts'] ?? [],
+                'filtros' => $config['filtros'] ?? [],
+                'buscarNumero' => $config['buscarNumero'] ?? null,
+                'ayuda' => $this->ayuda(),
                 'csrf' => $this->tokenCsrf(),
                 'moneda' => MONEDA_SIMBOLO,
             ],
         ]);
+    }
+
+    /**
+     * Ayuda del módulo (botón «?»): consejos de config/ayuda.php y las capturas que existan
+     * en assets/img/ayuda/{ruta}/ (listado.png y formulario.png).
+     */
+    protected function ayuda(): array
+    {
+        $raiz = dirname(__DIR__, 2);
+        $consejos = (require $raiz . '/config/ayuda.php')[$this->ruta()] ?? [];
+        $capturas = [];
+        foreach (['listado', 'formulario'] as $parte) {
+            $ruta = "assets/img/ayuda/{$this->ruta()}/$parte.png";
+            if (is_file("$raiz/$ruta")) {
+                $capturas[$parte] = $ruta . '?v=' . filemtime("$raiz/$ruta");
+            }
+        }
+
+        return ['consejos' => $consejos, 'capturas' => $capturas];
     }
 
     protected function obtener(): void
