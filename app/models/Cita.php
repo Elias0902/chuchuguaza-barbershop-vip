@@ -12,6 +12,8 @@ class Cita extends CrudModel
     /** Minutos mínimos entre dos citas del mismo barbero. */
     private const SEPARACION_MINUTOS = 30;
 
+    use SoloSusRegistros;
+
     protected string $tabla = 'citas';
     protected string $clave = 'id_cita';
     protected string $modulo = 'Citas';
@@ -45,11 +47,18 @@ class Cita extends CrudModel
                 FROM citas ci
                 LEFT JOIN cliente c ON c.id_cliente = ci.id_cliente
                 LEFT JOIN barberos b ON b.cedula = ci.cedula_barbero
+                WHERE {$this->condicionBarbero('ci')}
                 ORDER BY ci.status DESC, (ci.estado_cita = 'Pendiente') DESC, ci.fecha_cita DESC";
+    }
+
+    public function obtener(int|string $id): ?array
+    {
+        return $this->verificarDueno(parent::obtener($id));
     }
 
     protected function reglasNegocio(array &$datos, array $entrada, ?array $actual): void
     {
+        $this->asignarBarbero($datos);
         $cambioFecha = $actual === null || $actual['fecha_cita'] !== $datos['fecha_cita'];
         if ($cambioFecha && $datos['estado_cita'] === 'Pendiente' && strtotime($datos['fecha_cita']) < strtotime('today')) {
             throw new ValidacionException('No puedes agendar una cita pendiente en una fecha pasada.', 'fecha_cita');

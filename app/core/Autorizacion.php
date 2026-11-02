@@ -28,6 +28,9 @@ final class Autorizacion extends BaseModel
     /** Permisos del usuario en sesión, calculados una vez por petición. */
     private static ?array $permisosSesion = null;
 
+    /** Cédula del barbero vinculado al usuario en sesión; false = todavía no se consultó. */
+    private static string|null|false $barberoSesion = false;
+
     /** Menú completo de config/modulos.php. */
     public static function menu(): array
     {
@@ -61,6 +64,18 @@ final class Autorizacion extends BaseModel
         $this->asegurarConfiguracion($idRol);
 
         return self::$permisosSesion = $this->aplicarExcepciones($this->permisosDeRol($idRol), $this->excepcionesDeUsuario($idUsuario));
+    }
+
+    /** Barbero vinculado al usuario en sesión (null si la cuenta no es de un barbero). */
+    public function barberoSesion(): ?string
+    {
+        if (self::$barberoSesion !== false) {
+            return self::$barberoSesion;
+        }
+        $stmt = $this->seguridad()->prepare('SELECT cedula_barbero FROM usuarios WHERE id_usuario = :id');
+        $stmt->execute([':id' => (int) ($_SESSION['s_usuario']['id_usuario'] ?? 0)]);
+
+        return self::$barberoSesion = ($stmt->fetchColumn() ?: null);
     }
 
     /** Menú sin los módulos que el usuario no puede consultar (y sin grupos vacíos). */
@@ -150,6 +165,7 @@ final class Autorizacion extends BaseModel
     public static function reiniciar(): void
     {
         self::$permisosSesion = null;
+        self::$barberoSesion = false;
     }
 
     /**

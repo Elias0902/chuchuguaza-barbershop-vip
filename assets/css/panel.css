@@ -141,6 +141,9 @@ button, input, select, textarea { font: inherit; }
 .sidebar-brand span { display: flex; flex-direction: column; font-size: 15px; font-weight: 700; line-height: 1.25; }
 .sidebar-brand small { color: var(--texto-3); font-size: 11px; font-weight: 500; }
 .sidebar-nav { display: flex; flex-direction: column; gap: 2px; }
+/* Configuración y Ayuda: abajo del todo, separadas de los módulos del negocio. */
+.sidebar-bottom { margin-top: auto; padding-top: 12px; border-top: 1px solid var(--borde); }
+.sidebar > .sidebar-nav:first-of-type { margin-bottom: 18px; }
 .sidebar-group { margin-top: 10px; }
 .sidebar-group-toggle {
   display: flex; width: 100%; align-items: center; justify-content: space-between; padding: 8px 10px;
@@ -519,3 +522,52 @@ a.stat:hover { border-color: var(--acento-borde); transform: translateY(-2px); }
 .help-shot { margin: 14px 0 0; }
 .help-shot img { display: block; width: 100%; height: auto; border: 1px solid var(--borde-fuerte); border-radius: 10px; }
 .help-shot figcaption { margin-top: 6px; color: var(--caption); font-size: 12px; text-align: center; }
+
+/* ---------- Manual de usuario y centro de ayuda ---------- */
+.doc-layout { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 20px; align-items: start; }
+.doc-index { position: sticky; top: 84px; display: flex; flex-direction: column; gap: 2px; max-height: calc(100vh - 110px); padding: 14px 10px; overflow-y: auto; }
+.doc-index a { display: flex; align-items: center; gap: 9px; padding: 7px 10px; border-radius: 8px; color: var(--texto-2); font-size: 13px; text-decoration: none; }
+.doc-index a:hover { background: var(--hover); color: var(--texto-fuerte); }
+.doc-index a i { width: 15px; color: var(--rojo-claro); text-align: center; }
+.doc-index-group { margin: 12px 10px 4px; color: var(--texto-3); font-size: 10.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+.doc-body { display: grid; gap: 18px; }
+.doc-chapter { padding: 22px 24px; scroll-margin-top: 84px; }
+.doc-chapter h2 { display: flex; align-items: center; gap: 10px; margin: 4px 0 10px; font-size: 20px; }
+.doc-chapter h2 i { color: var(--rojo-claro); font-size: 17px; }
+.doc-chapter p, .doc-chapter li { color: var(--texto-2); font-size: 14px; line-height: 1.65; }
+.doc-chapter li strong { color: var(--texto-fuerte); }
+.doc-shots { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+.doc-link { display: inline-flex; align-items: center; gap: 8px; margin-top: 12px; color: var(--rojo-claro); font-size: 13.5px; font-weight: 600; text-decoration: none; }
+.doc-link:hover { text-decoration: underline; }
+.help-search { display: block; max-width: 640px; margin: 0 0 20px; }
+.help-search input { min-height: 48px; font-size: 15px; }
+.faq { display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 18px; align-items: start; }
+.faq-topic { padding: 18px 20px; }
+.faq-topic h2 { display: flex; align-items: center; gap: 10px; margin: 0 0 8px; font-size: 16px; }
+.faq-topic h2 i { color: var(--rojo-claro); }
+.faq-item { border-top: 1px solid var(--borde-suave); }
+.faq-item summary { padding: 12px 4px; color: var(--texto-fuerte); font-size: 14px; font-weight: 600; cursor: pointer; }
+.faq-item summary:hover { color: var(--rojo-claro); }
+.faq-item p { margin: 0 4px 10px; color: var(--texto-2); font-size: 13.5px; line-height: 1.65; }
+.faq-item .doc-link { margin: 0 4px 14px; }
+@media (max-width: 900px) {
+  .doc-layout { grid-template-columns: 1fr; }
+  .doc-index { position: static; max-height: none; }
+  .faq { grid-template-columns: 1fr; }
+}
+@media print {
+  .sidebar, .topbar, .doc-index, .heading-actions, .menu-overlay { display: none !important; }
+  .workspace { margin-left: 0; }
+  .doc-layout { display: block; }
+  .doc-chapter { break-inside: avoid; }
+}
+
+/* ---------- Sello de autoría (pie de todas las páginas) ---------- */
+.firma { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 20px; width: min(1480px, 100%); margin: 0 auto; padding: 18px clamp(16px, 3.5vw, 44px) 26px; border-top: 1px solid var(--borde-suave); color: var(--texto-3); font-size: 12.5px; }
+.firma a { color: inherit; text-decoration: none; }
+.firma a:hover { color: var(--texto-fuerte); }
+.firma-autor { display: inline-flex; align-items: center; gap: 10px; }
+.firma-autor strong { color: var(--texto-2); }
+.firma-sello { display: inline-grid; width: 30px; height: 30px; place-items: center; border: 1.5px solid var(--rojo-claro); border-radius: 50%; color: var(--rojo-claro); font-size: 10.5px; font-weight: 700; letter-spacing: .04em; transform: rotate(-8deg); }
+.firma-legal { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 16px; }
+@media print { .firma { display: flex !important; } }

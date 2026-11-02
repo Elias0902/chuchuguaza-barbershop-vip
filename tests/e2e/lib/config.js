@@ -32,5 +32,6 @@ export const config = {
   oculto: process.env.OCULTO === '1',
   pausa: Number(process.env.PAUSA_MS || 0),
   espera: 15000,
+  barbero: { usuario: process.env.TEST_BARBERO_USUARIO, clave: process.env.TEST_BARBERO_CLAVE, cedula: process.env.TEST_BARBERO_CEDULA },
   carpetaCapturas: join(raiz, 'capturas'),
 };

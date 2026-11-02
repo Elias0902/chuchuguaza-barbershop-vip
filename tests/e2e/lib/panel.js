@@ -54,8 +54,8 @@ export class Panel {
     this.driver = driver;
   }
 
-  /** Abre el navegador e inicia sesión con el usuario de pruebas. */
-  static async abrir() {
+  /** Abre el navegador e inicia sesión (por defecto, con el usuario de pruebas de .env). */
+  static async abrir(usuario = config.usuario, clave = config.clave) {
     const builder = new Builder();
     const argumentos = ['--window-size=1400,950', '--lang=es'];
     if (config.oculto) argumentos.push('--headless=new');
@@ -67,7 +67,7 @@ export class Panel {
     }
 
     const panel = new Panel(await builder.build());
-    await panel.iniciarSesion();
+    await panel.iniciarSesion(usuario, clave);
     return panel;
   }
 
@@ -83,10 +83,10 @@ export class Panel {
     if (config.pausa > 0) await this.driver.sleep(config.pausa);
   }
 
-  async iniciarSesion() {
+  async iniciarSesion(usuario = config.usuario, clave = config.clave) {
     await this.driver.get(`${config.urlBase}/index.php?url=autenticator&action=acceso_interno`);
-    await this.escribir(await this.esperar(By.name('username')), config.usuario);
-    await this.escribir(await this.esperar(By.name('password')), config.clave);
+    await this.escribir(await this.esperar(By.name('username')), usuario);
+    await this.escribir(await this.esperar(By.name('password')), clave);
     await this.clic(await this.driver.findElement(By.css('form button[type="submit"]')));
     await this.driver.wait(until.urlContains('url=dashboard'), config.espera,
       'No se pudo iniciar sesión: revisa TEST_USUARIO y TEST_CLAVE en tests/e2e/.env');

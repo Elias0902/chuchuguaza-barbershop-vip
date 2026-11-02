@@ -7,6 +7,7 @@ use App\Models\Analisis\Hallazgo;
 
 /**
  * @var array $resumen
+ * @var array $misCortes
  * @var array $proximasCitas
  * @var array $stockBajo
  * @var array $ingresosSemana
@@ -65,7 +66,23 @@ $verProductos = isset($permisosSesion['productos']);
           </div>
         </section>
 
-        <?php if ($tarjetas): ?>
+        <?php if ($misCortes): ?>
+        <section class="stats" aria-label="Mis cortes">
+          <?php foreach ([
+              ['Mis cortes de hoy', (int) $misCortes['cortes_hoy'], 'Tickets registrados hoy', 'fa-cut'],
+              ['Mis cortes de la semana', (int) $misCortes['cortes_semana'], 'Desde el lunes', 'fa-calendar-alt'],
+              ['Mi comisión estimada', Formato::valor($misCortes['comision_semana'], 'moneda'), Formato::valor($misCortes['porcentaje_comision'], 'decimal') . ' % de los servicios de la semana', 'fa-hand-holding-usd'],
+              ['Mis citas de hoy', (int) $misCortes['citas_hoy'], 'Pendientes', 'fa-calendar-check'],
+          ] as [$etiqueta, $valor, $detalle, $icono]): ?>
+            <div class="stat">
+              <span class="stat-icon"><i class="fas <?= Vista::e($icono) ?>" aria-hidden="true"></i></span>
+              <span class="stat-label"><?= Vista::e($etiqueta) ?></span>
+              <strong class="stat-value"><?= Vista::e($valor) ?></strong>
+              <span class="stat-meta"><?= Vista::e($detalle) ?></span>
+            </div>
+          <?php endforeach; ?>
+        </section>
+        <?php elseif ($tarjetas): ?>
         <section class="stats" aria-label="Indicadores del día">
           <?php foreach ($tarjetas as [$etiqueta, $valor, $detalle, $icono, $ruta]): ?>
             <a class="stat" href="index.php?url=<?= Vista::e($ruta) ?>">
@@ -150,7 +167,7 @@ $verProductos = isset($permisosSesion['productos']);
         <?php endif; ?>
 
         <?php if (!$menu): ?>
-          <p class="empty-note">Tu rol todavía no tiene módulos asignados. Pide a un administrador que configure sus permisos en Seguridad → Roles.</p>
+          <p class="empty-note">Tu rol todavía no tiene módulos asignados. Pide a un administrador que configure sus permisos en Configuración → Roles.</p>
         <?php endif; ?>
 
         <section aria-labelledby="accesos-titulo"<?= $menu ? '' : ' hidden' ?>>
@@ -167,6 +184,7 @@ $verProductos = isset($permisosSesion['productos']);
           </div>
         </section>
       </main>
+      <?php require __DIR__ . '/partials/firma.php'; ?>
     </div>
   </div>
   <script src="<?= Vista::asset('assets/js/panel.js') ?>"></script>

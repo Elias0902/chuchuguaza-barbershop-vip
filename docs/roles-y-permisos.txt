@@ -1,0 +1,144 @@
+==========================================================================
+  CHUCHUGUAZA BARBERSHOP · ROLES, PERMISOS Y VISTAS DEL SISTEMA
+==========================================================================
+
+Cada usuario tiene un ROL. El rol decide qué módulos ve en el menú y qué
+puede hacer en cada uno:
+
+  C = Consultar   (ver la lista y el detalle)
+  R = Registrar   (crear registros nuevos)
+  M = Modificar   (cambiar registros)
+  E = Eliminar    (mandar a «Eliminados» y restaurar; nada se borra de verdad)
+
+Sin «Consultar» el módulo no aparece en el menú.
+
+
+--------------------------------------------------------------------------
+1. ADMINISTRADOR · acceso total
+--------------------------------------------------------------------------
+Para el dueño o encargado general.
+
+  Ve y hace TODO (C R M E) en todos los módulos, incluida la Configuración:
+  usuarios, roles, permisos, bitácora y respaldos.
+
+  Vista de inicio: todos los indicadores del día (ingresos, citas, tickets
+  por cobrar, clientes), ingresos de la semana, próximas citas, productos
+  con stock bajo y sugerencias del sistema.
+
+
+--------------------------------------------------------------------------
+2. FINANZAS · controla el dinero, los productos y el análisis
+--------------------------------------------------------------------------
+Para quien lleva la caja, el inventario y los pagos del personal.
+
+  Atención
+    Citas ......................... C
+    Tickets de atención ........... C M      (puede corregir, no crear)
+    Pagos ......................... C R M E
+  Catálogos
+    Clientes ...................... C
+    Barberos ...................... C M      (comisión y sueldo base)
+    Servicios ..................... C R M E  (precios)
+    Productos y bebidas ........... C R M E  (precios y stock)
+    Categorías .................... C R M E
+    Promociones ................... C R M E
+    Métodos de pago ............... C R M E
+  Caja y finanzas
+    Cierres de caja ............... C R M E
+    Gastos generales .............. C R M E
+    Retiros de dinero ............. C R M E
+    Nómina ........................ C R M E
+  Academia
+    Cursos ........................ C R M E
+    Inscripciones ................. C R M E
+  Análisis
+    Buzón de sugerencias .......... C M
+    Análisis de ventas ............ C
+  Configuración
+    Bitácora ...................... C
+    Respaldos ..................... C R      (crear y descargar, no restaurar)
+
+  NO ve: Usuarios, Roles, Políticas de servicio.
+
+  Vista de inicio: ingresos de hoy y de la semana, tickets por cobrar,
+  estado de la caja, stock bajo, citas y sugerencias del sistema.
+
+
+--------------------------------------------------------------------------
+3. RECEPCIÓN · atiende a los clientes
+--------------------------------------------------------------------------
+Para quien está en el mostrador: agenda, registra y cobra.
+
+  Atención
+    Citas ......................... C R M E
+    Tickets de atención ........... C R M
+    Pagos ......................... C R
+  Catálogos
+    Clientes ...................... C R M
+    Barberos, Servicios, Productos,
+    Promociones ................... C        (solo para consultar precios)
+  Caja y finanzas
+    Cierres de caja ............... C        (ver si la caja está abierta)
+  Academia
+    Cursos ........................ C
+    Inscripciones ................. C R
+
+  Vista de inicio: ingresos de hoy, citas del día, tickets por cobrar,
+  clientes y próximas citas.
+
+
+--------------------------------------------------------------------------
+4. BARBERO · registra sus propios cortes
+--------------------------------------------------------------------------
+Para cada barbero del equipo.
+
+    Tickets de atención ........... C R      (solo los suyos)
+    Citas ......................... C        (solo las suyas)
+    Clientes ...................... C R      (para registrar un cliente nuevo)
+
+  IMPORTANTE: la cuenta del barbero se debe VINCULAR con su ficha de
+  barbero (Usuarios → modificar → «Barbero vinculado»). Así:
+    - solo ve sus propios tickets y citas;
+    - al registrar un ticket su nombre ya viene puesto y no puede
+      registrarlo a nombre de otro barbero.
+
+  Vista de inicio («Mis cortes»): cortes de hoy, cortes de la semana,
+  comisión estimada de la semana y citas de hoy, más sus próximas citas.
+  No ve ingresos del negocio, caja ni datos de los demás barberos.
+
+
+--------------------------------------------------------------------------
+PARA TODOS LOS ROLES
+--------------------------------------------------------------------------
+  - Mi perfil: cambiar foto y contraseña.
+  - Manual de usuario (Configuración → Manual de usuario): explica solo los
+    módulos que ese rol puede usar, con pantallazos.
+  - Centro de ayuda (Ayuda → Centro de ayuda): preguntas frecuentes con
+    buscador.
+  - Botón «?» en cada módulo: ayuda rápida de esa pantalla.
+  - Modo claro / oscuro.
+  - Recuperar la contraseña desde la pantalla de inicio.
+
+
+--------------------------------------------------------------------------
+AJUSTES Y EXCEPCIONES
+--------------------------------------------------------------------------
+  - Cambiar lo que puede hacer un rol: Configuración → Roles → «Permisos».
+  - Dar o quitar un permiso a UNA persona sin cambiar su rol:
+    Configuración → Usuarios → «Permisos». Las casillas resaltadas son
+    excepciones solo para ese usuario.
+  - Nadie puede cambiar sus propios permisos ni su propio rol.
+
+
+--------------------------------------------------------------------------
+NOTAS TÉCNICAS
+--------------------------------------------------------------------------
+  - Los roles base están en config/roles.php y se cargan (o se vuelven a
+    dejar como en este documento) con:
+        php bd/seguridadBD/semillas/roles.php
+    Con XAMPP: C:\xampp\php\php.exe bd/seguridadBD/semillas/roles.php
+  - Un módulo nuevo se da completo automáticamente a los roles que pueden
+    modificar Roles (los administradores); a los demás hay que asignarlo.
+  - Respaldos: automáticos cada 24 horas (se guardan los últimos 14 de cada
+    base) en storage/respaldos. Conviene descargar uno de vez en cuando y
+    guardarlo fuera de la computadora del local.

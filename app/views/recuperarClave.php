@@ -74,6 +74,7 @@ $e = static fn(string $texto): string => htmlspecialchars($texto, ENT_QUOTES, 'U
     <div class="links">
       <a class="back" href="index.php?url=autenticator&amp;action=acceso_interno">Volver a iniciar sesión</a>
     </div>
+    <?php require __DIR__ . '/partials/firma.php'; ?>
   </main>
 </body>
 </html>

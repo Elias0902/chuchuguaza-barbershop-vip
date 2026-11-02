@@ -7,6 +7,7 @@ use App\Helpers\Vista;
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#060f26">
+<meta name="author" content="<?= Vista::e(APP_AUTOR . " · " . APP_AUTOR_WEB) ?>">
 <meta name="csrf-token" content="<?= Vista::e($csrf ?? '') ?>">
 <script>
   // Tema antes de pintar: el guardado por el usuario o, si no hay, el del sistema operativo.

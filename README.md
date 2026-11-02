@@ -1,5 +1,7 @@
 # Chuchuguaza Barbershop
 
+> Sistema y página web creados por **Elias Armas** · [eliasarmas.dev](https://eliasarmas.dev). Software propietario: ver [LICENSE](LICENSE).
+
 Sistema de gestión interna de la barbería Chuchuguaza (17 años de trayectoria: barbería, venta de productos y bebidas, y cursos).
 
 - **Tecnología:** PHP 8.1+ nativo con MVC, PDO (MySQL), Composer y recursos locales.

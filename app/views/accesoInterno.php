@@ -57,6 +57,7 @@
       <?php if (!isset($_SESSION['s_usuario'])): ?><a class="back" href="index.php?url=autenticator&amp;action=recuperar">¿Olvidaste tu contraseña?</a><?php endif; ?>
       <a class="back" href="landing-chuchuguaza/index.html">Volver a la página principal</a>
     </div>
+    <?php require __DIR__ . '/partials/firma.php'; ?>
   </main>
 </body>
 </html>

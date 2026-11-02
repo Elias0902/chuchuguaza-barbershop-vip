@@ -131,8 +131,10 @@ return [
             ],
         ],
     ],
+    // Grupo que se muestra abajo en el sidebar, aparte de los módulos del negocio.
     'seguridad' => [
-        'titulo' => 'Seguridad',
+        'titulo' => 'Configuración',
+        'aparte' => true,
         'modulos' => [
             'usuarios' => [
                 'titulo' => 'Usuarios',
@@ -148,6 +150,11 @@ return [
                 'titulo' => 'Bitácora',
                 'icono' => 'fa-history',
                 'descripcion' => 'Historial de accesos y de todas las operaciones realizadas en el sistema.',
+            ],
+            'respaldos' => [
+                'titulo' => 'Respaldos',
+                'icono' => 'fa-database',
+                'descripcion' => 'Copias de seguridad automáticas y manuales de toda la información del sistema.',
             ],
         ],
     ],

@@ -28,6 +28,7 @@ class ReportePdf extends FPDF
         $this->AliasNbPages();
         $this->SetTitle($this->texto($titulo . ' - ' . APP_NOMBRE));
         $this->SetAuthor($this->texto(APP_NOMBRE));
+        $this->SetCreator($this->texto('Sistema creado por ' . APP_AUTOR . ' · ' . APP_AUTOR_WEB));
         $this->AddPage();
     }
 
@@ -60,8 +61,13 @@ class ReportePdf extends FPDF
         $this->SetFont('Helvetica', '', 8);
         $this->SetTextColor(120, 120, 120);
         $generado = $this->usuario !== '' ? 'Generado por ' . $this->usuario : 'Generado por el sistema';
-        $this->Cell(0, 6, $this->texto($generado), 0, 0, 'L');
-        $this->Cell(0, 6, $this->texto('Página ' . $this->PageNo() . ' de {nb}'), 0, 0, 'R');
+        $tercio = ($this->GetPageWidth() - 2 * self::MARGEN) / 3;
+        $this->Cell($tercio, 6, $this->texto($generado), 0, 0, 'L');
+        // Sello de autoría del sistema.
+        $this->SetTextColor(...self::ROJO);
+        $this->Cell($tercio, 6, $this->texto('Sistema creado por ' . APP_AUTOR_WEB), 0, 0, 'C');
+        $this->SetTextColor(120, 120, 120);
+        $this->Cell($tercio, 6, $this->texto('Página ' . $this->PageNo() . ' de {nb}'), 0, 0, 'R');
     }
 
     /**

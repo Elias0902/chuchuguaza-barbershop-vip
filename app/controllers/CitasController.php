@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Core\Autorizacion;
 use App\Core\CrudController;
 use App\Core\CrudModel;
 use App\Models\Cita;
@@ -37,6 +38,8 @@ class CitasController extends CrudController
     {
         return [
             'buscarNumero' => ['etiqueta' => 'N.º de cita'],
+            // Un barbero vinculado ya tiene su nombre puesto en el formulario.
+            'defectos' => ['cedula_barbero' => (new Autorizacion())->barberoSesion()],
             'acciones' => [
                 ['clave' => 'completar', 'etiqueta' => 'Completar', 'icono' => 'fa-check', 'si' => ['estado_cita' => 'Pendiente'],
                     'confirmar' => '¿Marcar la cita como completada?'],

@@ -82,6 +82,7 @@ $articuloNuevo = $modulo['femenino'] ? 'Nueva' : 'Nuevo';
           </div>
         </section>
       </main>
+      <?php require __DIR__ . '/partials/firma.php'; ?>
     </div>
   </div>
 
