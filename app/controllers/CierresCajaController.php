@@ -37,6 +37,7 @@ class CierresCajaController extends CrudController
     protected function configuracionVista(): array
     {
         return [
+            'buscarNumero' => ['etiqueta' => 'N.º de caja'],
             'edicionSi' => ['estado' => 'Abierta'],
             'acciones' => [
                 [

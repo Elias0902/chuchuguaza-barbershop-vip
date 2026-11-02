@@ -37,6 +37,9 @@ $articuloNuevo = $modulo['femenino'] ? 'Nueva' : 'Nuevo';
                 <i class="fas fa-plus" aria-hidden="true"></i><?= Vista::e($articuloNuevo . ' ' . $modulo['singular']) ?>
               </button>
             <?php endif; ?>
+            <button class="icon-button help-button" type="button" title="Ayuda: cómo usar este módulo" aria-label="Ayuda: cómo usar este módulo" data-ayuda>
+              <i class="fas fa-question" aria-hidden="true"></i>
+            </button>
           </div>
         </section>
 
@@ -52,6 +55,7 @@ $articuloNuevo = $modulo['femenino'] ? 'Nueva' : 'Nuevo';
             <?php else: ?>
               <div class="toolbar-count"><span data-contador="todos">0</span> movimientos</div>
             <?php endif; ?>
+            <div class="quick-filters" data-filtros-rapidos hidden></div>
             <label class="search">
               <i class="fas fa-search" aria-hidden="true"></i>
               <span class="sr-only">Buscar</span>

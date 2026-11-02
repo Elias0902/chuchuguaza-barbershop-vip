@@ -15,7 +15,7 @@ use Throwable;
  * Polimorfismo: los hijos reescriben sqlConsulta(), reglasNegocio(), antesDeEliminar()...
  * para agregar sus reglas sin cambiar el flujo general.
  *
- * Tipos de campo admitidos: texto, textoLargo, nombre, email, telefono, cedula,
+ * Tipos de campo admitidos: texto, textoLargo, nombre, email, telefono, cedula, dias,
  * usuario, clave, entero, decimal, fecha, fechahora, opcion, relacion, booleano y detalle.
  */
 abstract class CrudModel extends BaseModel implements CrudInterface
@@ -367,6 +367,15 @@ abstract class CrudModel extends BaseModel implements CrudInterface
                     return $partes[1] . '-' . $partes[2];
                 }
                 throw new ValidacionException("$etiqueta debe tener el formato V-12345678 o E-12345678.", $campo);
+
+            case 'dias':
+                $dias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+                $elegidos = array_map('trim', explode(',', $texto));
+                if (array_diff($elegidos, $dias)) {
+                    throw new ValidacionException("Selecciona días válidos en $etiqueta.", $campo);
+                }
+                // Siempre en el orden de la semana.
+                return implode(', ', array_values(array_intersect($dias, $elegidos)));
 
             case 'usuario':
                 if (!preg_match('/\A[a-zA-Z0-9._-]{4,30}\z/', $texto)) {

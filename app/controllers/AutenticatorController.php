@@ -3,7 +3,9 @@
 namespace App\Controllers;
 
 use App\Core\BaseController;
+use App\Core\ValidacionException;
 use App\Models\Autenticator;
+use App\Models\RecuperacionClave;
 use Throwable;
 
 /**
@@ -25,6 +27,10 @@ class AutenticatorController extends BaseController
             '', 'acceso_interno' => $this->mostrarAcceso(),
             'ingresar_interno' => $this->iniciarSesion(),
             'cerrar_interno' => $this->cerrarSesion(),
+            'recuperar' => $this->mostrarRecuperacion('solicitar'),
+            'enviar_recuperacion' => $this->enviarRecuperacion(),
+            'restablecer' => $this->mostrarRestablecer(),
+            'guardar_clave' => $this->guardarClave(),
             default => $this->redirigir(self::RUTA_ACCESO),
         };
     }
@@ -106,6 +112,73 @@ class AutenticatorController extends BaseController
         }
         session_destroy();
         $this->redirigir('landing-chuchuguaza/index.html');
+    }
+
+    private function mostrarRecuperacion(string $paso, array $datos = []): void
+    {
+        if ($this->usuario() !== null) {
+            $this->redirigir('index.php?url=dashboard');
+        }
+        $this->render('recuperarClave', $datos + ['paso' => $paso, 'mensaje' => '']);
+    }
+
+    /** Siempre responde lo mismo para no revelar qué usuarios o correos existen. */
+    private function enviarRecuperacion(): void
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            $this->redirigir('index.php?url=autenticator&action=recuperar');
+        }
+        if (!$this->csrfValido($_POST['csrf_token'] ?? null)) {
+            $this->mostrarRecuperacion('solicitar', ['mensaje' => 'La sesión del formulario venció. Intenta de nuevo.']);
+            return;
+        }
+
+        $identificador = trim((string) ($_POST['identificador'] ?? ''));
+        if ($identificador !== '' && strlen($identificador) <= 100) {
+            try {
+                (new RecuperacionClave())->solicitar($identificador);
+            } catch (Throwable $e) {
+                error_log('Error al solicitar recuperación: ' . $e->getMessage());
+            }
+        }
+        $this->mostrarRecuperacion('enviado');
+    }
+
+    private function mostrarRestablecer(): void
+    {
+        $token = (string) ($_GET['token'] ?? '');
+        $usuario = (new RecuperacionClave())->usuarioDelToken($token);
+        if ($usuario === null) {
+            $this->mostrarRecuperacion('invalido');
+            return;
+        }
+        $this->mostrarRecuperacion('restablecer', ['token' => $token, 'nombreUsuario' => $usuario['nombre_usuario']]);
+    }
+
+    private function guardarClave(): void
+    {
+        $token = (string) ($_POST['token'] ?? '');
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            $this->redirigir(self::RUTA_ACCESO);
+        }
+
+        $modelo = new RecuperacionClave();
+        try {
+            if (!$this->csrfValido($_POST['csrf_token'] ?? null)) {
+                throw new ValidacionException('La sesión del formulario venció. Intenta de nuevo.');
+            }
+            $modelo->restablecer($token, (string) ($_POST['clave'] ?? ''), (string) ($_POST['confirmacion'] ?? ''));
+        } catch (ValidacionException $e) {
+            $usuario = $modelo->usuarioDelToken($token);
+            if ($usuario === null) {
+                $this->mostrarRecuperacion('invalido');
+                return;
+            }
+            $this->mostrarRecuperacion('restablecer', ['token' => $token, 'nombreUsuario' => $usuario['nombre_usuario'], 'mensaje' => $e->getMessage()]);
+            return;
+        }
+
+        $this->volverConMensaje('Tu contraseña se cambió. Ya puedes iniciar sesión.');
     }
 
     private function volverConMensaje(string $mensaje): never

@@ -49,3 +49,17 @@ define('DB_PASS_SECURITY', env('DB_PASS_SECURITY', ''));
 // ── Limitador de intentos de inicio de sesión ──────────────────────────────
 define('MAX_INTENTOS_LOGIN', 3);
 define('BLOQUEO_MINUTOS_LOGIN', 30);
+
+// ── Correo (recuperación de contraseña) ────────────────────────────────────
+// Sin SMTP_HOST los correos no se envían: se guardan en storage/correos para revisarlos.
+define('APP_URL', rtrim(env('APP_URL', 'http://localhost/chuchuguaza-barber-shop'), '/'));
+define('SMTP_HOST', env('SMTP_HOST'));
+define('SMTP_PUERTO', (int) env('SMTP_PUERTO', '587'));
+define('SMTP_USUARIO', env('SMTP_USUARIO'));
+define('SMTP_CLAVE', env('SMTP_CLAVE'));
+define('SMTP_SEGURIDAD', env('SMTP_SEGURIDAD', 'tls'));
+define('CORREO_REMITENTE', env('CORREO_REMITENTE', 'no-responder@chuchuguaza.local'));
+
+// ── Recuperación de contraseña ─────────────────────────────────────────────
+define('RECUPERACION_MINUTOS', 30);
+define('RECUPERACION_MAX_POR_HORA', 3);

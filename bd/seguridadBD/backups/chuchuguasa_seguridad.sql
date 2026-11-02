@@ -66,6 +66,7 @@ CREATE TABLE permisos_usuario (
     id_usuario INT(11) NOT NULL,
     id_modulo INT(11) NOT NULL,
     id_permiso INT(11) NOT NULL,
+    tipo ENUM('Conceder', 'Quitar') NOT NULL DEFAULT 'Conceder',
     status INT(11) NOT NULL DEFAULT 1,
     FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (id_modulo) REFERENCES modulos(id_modulo) ON DELETE CASCADE ON UPDATE CASCADE,

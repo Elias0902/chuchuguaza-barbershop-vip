@@ -60,7 +60,7 @@ final class Autorizacion extends BaseModel
 
         $this->asegurarConfiguracion($idRol);
 
-        return self::$permisosSesion = $this->permisosDeRol($idRol);
+        return self::$permisosSesion = $this->aplicarExcepciones($this->permisosDeRol($idRol), $this->excepcionesDeUsuario($idUsuario));
     }
 
     /** Menú sin los módulos que el usuario no puede consultar (y sin grupos vacíos). */
@@ -80,6 +80,48 @@ final class Autorizacion extends BaseModel
         }
 
         return $menu;
+    }
+
+    /**
+     * Excepciones activas de un usuario: ['Conceder' => [ruta => [...]], 'Quitar' => [ruta => [...]]].
+     */
+    public function excepcionesDeUsuario(int $idUsuario): array
+    {
+        $stmt = $this->seguridad()->prepare(
+            'SELECT m.ruta, p.nombre_permiso, pu.tipo
+             FROM permisos_usuario pu
+             INNER JOIN modulos m ON m.id_modulo = pu.id_modulo
+             INNER JOIN permisos p ON p.id_permisos = pu.id_permiso
+             WHERE pu.id_usuario = :usuario AND pu.status = 1 AND m.status = 1'
+        );
+        $stmt->execute([':usuario' => $idUsuario]);
+
+        $claves = array_flip(self::PERMISOS);
+        $excepciones = ['Conceder' => [], 'Quitar' => []];
+        foreach ($stmt->fetchAll() as $fila) {
+            if (isset($claves[$fila['nombre_permiso']])) {
+                $excepciones[$fila['tipo']][$fila['ruta']][] = $claves[$fila['nombre_permiso']];
+            }
+        }
+
+        return $excepciones;
+    }
+
+    /** Permisos del rol + los concedidos al usuario − los que se le quitaron. */
+    public function aplicarExcepciones(array $permisos, array $excepciones): array
+    {
+        foreach ($excepciones['Conceder'] as $ruta => $lista) {
+            $permisos[$ruta] = array_values(array_unique(array_merge($permisos[$ruta] ?? [], $lista)));
+        }
+        foreach ($excepciones['Quitar'] as $ruta => $lista) {
+            $permisos[$ruta] = array_values(array_diff($permisos[$ruta] ?? [], $lista));
+            // Sin consultar no se puede hacer nada más en el módulo.
+            if ($permisos[$ruta] === [] || !in_array('consultar', $permisos[$ruta], true)) {
+                unset($permisos[$ruta]);
+            }
+        }
+
+        return $permisos;
     }
 
     public function permisosDeRol(int $idRol): array

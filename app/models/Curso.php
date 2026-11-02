@@ -22,7 +22,7 @@ class Curso extends CrudModel
                 'ancho' => 'completo', 'placeholder' => 'Barbería básica, degradados avanzados...',
             ],
             'costo' => ['etiqueta' => 'Costo', 'tipo' => 'decimal', 'requerido' => true, 'min' => 0, 'maxValor' => 99999999.99],
-            'dias_imparte' => ['etiqueta' => 'Días de clase', 'tipo' => 'texto', 'max' => 100, 'placeholder' => 'Lunes y miércoles'],
+            'dias_imparte' => ['etiqueta' => 'Días de clase', 'tipo' => 'dias', 'max' => 100, 'ancho' => 'completo'],
             'horario' => ['etiqueta' => 'Horario', 'tipo' => 'texto', 'max' => 50, 'placeholder' => '6:00 pm a 8:00 pm'],
             'descripcion' => ['etiqueta' => 'Descripción', 'tipo' => 'textoLargo', 'max' => 1000, 'ancho' => 'completo'],
         ];

@@ -21,11 +21,19 @@ class PagosController extends CrudController
     protected function columnas(): array
     {
         return [
+            ['campo' => 'id_pago', 'etiqueta' => 'N.º', 'formato' => 'numero'],
             ['campo' => 'fecha_pago', 'etiqueta' => 'Fecha', 'formato' => 'fechahora'],
             ['campo' => 'id_ticket', 'etiqueta' => 'Ticket', 'formato' => 'numero', 'sub' => 'cliente'],
             ['campo' => 'nombre_metodo', 'etiqueta' => 'Método'],
             ['campo' => 'referencia', 'etiqueta' => 'Referencia'],
             ['campo' => 'monto', 'etiqueta' => 'Monto', 'formato' => 'moneda'],
+        ];
+    }
+
+    protected function configuracionVista(): array
+    {
+        return [
+            'buscarNumero' => ['etiqueta' => 'N.º de pago'],
         ];
     }
 }

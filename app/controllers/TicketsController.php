@@ -38,6 +38,7 @@ class TicketsController extends CrudController
     protected function configuracionVista(): array
     {
         return [
+            'buscarNumero' => ['etiqueta' => 'N.º de ticket'],
             'opciones' => ['metodos' => (new Pago())->opcionesCampo('id_metodo')],
             'acciones' => [
                 [

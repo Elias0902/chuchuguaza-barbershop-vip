@@ -38,6 +38,7 @@
   };
 
   const NUMERICOS = ['moneda', 'entero', 'porcentaje'];
+  const DIAS = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
 
   function formatear(valor, columna) {
     if (valor === null || valor === undefined || valor === '') return '—';
@@ -77,6 +78,8 @@
       this.enlaceReporte = document.querySelector('[data-reporte]');
 
       this.dibujarCabecera();
+      this.numero = '';
+      this.dibujarFiltros();
       this.enlazarEventos();
       this.cargar();
     }
@@ -94,6 +97,7 @@
 
     enlazarEventos() {
       document.querySelector('[data-nuevo]')?.addEventListener('click', () => this.abrirFormulario(null, 'nuevo'));
+      document.querySelector('[data-ayuda]')?.addEventListener('click', () => this.abrirAyuda());
       document.querySelectorAll('[data-filtro]').forEach((boton) => boton.addEventListener('click', () => {
         this.filtro = boton.dataset.filtro;
         this.pagina = 1;
@@ -114,11 +118,96 @@
       }));
     }
 
+    /** Filtros rápidos: número exacto del registro y selects por columna (curso, alumno, día...). */
+    dibujarFiltros() {
+      const caja = document.querySelector('[data-filtros-rapidos]');
+      const { buscarNumero, filtros } = this.config;
+      if (!caja || (!buscarNumero && !filtros.length)) return;
+      this.filtrosActivos = {};
+      if (buscarNumero) {
+        const numero = el('input', { type: 'search', inputmode: 'numeric', placeholder: buscarNumero.etiqueta || 'N.º', 'aria-label': `Buscar por ${buscarNumero.etiqueta || 'número'}`, 'data-buscar-numero': '' });
+        numero.addEventListener('input', () => {
+          numero.value = numero.value.replace(/\D/g, '');
+          this.numero = numero.value;
+          this.pagina = 1;
+          this.render();
+        });
+        caja.append(numero);
+      }
+      filtros.forEach((filtro) => {
+        const select = el('select', { 'aria-label': `Filtrar por ${filtro.etiqueta}`, 'data-filtro-campo': filtro.campo },
+          el('option', { value: '' }, `${filtro.etiqueta}: todos`));
+        select.addEventListener('change', () => { this.filtrosActivos[filtro.campo] = select.value; this.pagina = 1; this.render(); });
+        filtro.select = select;
+        caja.append(select);
+      });
+      caja.hidden = false;
+    }
+
+    /** Llena los selects de filtro con las opciones fijas o con los valores que hay en la tabla. */
+    actualizarOpcionesFiltros() {
+      this.config.filtros.forEach((filtro) => {
+        if (!filtro.select) return;
+        const valores = filtro.opciones || [...new Set(this.registros.map((r) => r[filtro.campo]).filter(Boolean))].sort((a, b) => String(a).localeCompare(String(b), 'es'));
+        const actual = filtro.select.value;
+        filtro.select.replaceChildren(filtro.select.firstChild, ...valores.map((v) => el('option', { value: v }, v)));
+        filtro.select.value = valores.includes(actual) ? actual : '';
+      });
+    }
+
+    // ---------- Ayuda asistida (botón «?») ----------
+    /** Manual del módulo: los pasos salen de su configuración (campos, permisos, filtros) y los consejos del servidor. */
+    abrirAyuda() {
+      const c = this.config;
+      const singular = c.singular;
+      const nuevo = `${c.femenino ? 'Nueva' : 'Nuevo'} ${singular}`;
+      const ayuda = c.ayuda || { consejos: [], capturas: {} };
+      const ventana = modal({ titulo: `Ayuda · ${c.titulo}`, tamano: 'modal-lg' });
+
+      const captura = (parte, texto) => (ayuda.capturas[parte]
+        ? el('figure', { class: 'help-shot' }, el('img', { src: ayuda.capturas[parte], alt: texto, loading: 'lazy' }), el('figcaption', {}, texto))
+        : null);
+      const seccion = (icon, titulo, ...contenido) => el('section', { class: 'help-step' },
+        el('h3', {}, icono(icon), titulo), ...contenido.filter(Boolean));
+      const lista = (items) => el('ul', {}, ...items.filter(Boolean).map((t) => el('li', {}, t)));
+
+      const consultar = [
+        c.tieneEstado ? 'Las pestañas «Activos», «Eliminados» y «Todos» cambian lo que se muestra en la tabla.' : null,
+        'Escribe en «Buscar...» cualquier dato visible (nombre, fecha, monto...) para filtrar la tabla al instante.',
+        c.buscarNumero ? `Si conoces el número, escríbelo en «${c.buscarNumero.etiqueta}»: es la forma más rápida de encontrarlo.` : null,
+        ...c.filtros.map((f) => `Usa el filtro «${f.etiqueta}» para ver solo los registros de ${f.etiqueta.toLowerCase() === 'día' ? 'un día' : 'un ' + f.etiqueta.toLowerCase()}.`),
+        'Con el botón del ojo ves todo el detalle sin modificar nada.',
+      ];
+
+      const campos = Object.values(c.campos || {});
+      const registrar = !c.soloConsulta && c.permisos.registrar ? seccion('fa-plus', `Registrar ${c.femenino ? 'una' : 'un'} ${singular}`,
+        el('p', {}, `Pulsa «${nuevo}», completa el formulario y pulsa «Guardar». Los campos con * son obligatorios.`),
+        campos.length ? lista(campos.map((d) => `${d.etiqueta}${d.requerido === true || d.requerido === 'registro' ? ' *' : ''}${d.ayuda ? ': ' + d.ayuda : ''}`)) : null,
+        captura('formulario', `Formulario de ${singular}`)) : null;
+
+      const acciones = [
+        !c.soloConsulta && c.permisos.modificar ? seccion('fa-pen', 'Modificar', el('p', {}, 'Pulsa el lápiz en la fila, cambia los datos y guarda. Los campos bloqueados no se pueden cambiar después de registrados.')) : null,
+        c.tieneEstado && c.permisos.eliminar ? seccion('fa-trash-alt', 'Eliminar y restaurar',
+          el('p', {}, 'La papelera hace una eliminación lógica: el registro pasa a «Eliminados» y no se pierde. Desde esa pestaña puedes devolverlo con «Restaurar».')) : null,
+        ...(c.acciones || []).map((a) => seccion(a.icono || 'fa-bolt', a.etiqueta, el('p', {}, `Botón «${a.etiqueta}» en cada fila.`))),
+        seccion('fa-file-pdf', 'Reporte PDF', el('p', {}, 'Genera un PDF con lo que muestra la pestaña elegida, listo para imprimir o enviar.')),
+      ];
+
+      ventana.cuerpo.append(el('div', { class: 'help-manual' },
+        el('p', { class: 'help-intro' }, c.descripcion),
+        ayuda.consejos.length ? seccion('fa-lightbulb', 'Consejos para este módulo', lista(ayuda.consejos)) : null,
+        seccion('fa-search', 'Consultar y buscar', lista(consultar), captura('listado', `Listado de ${c.titulo.toLowerCase()}`)),
+        registrar,
+        ...acciones.filter(Boolean)));
+      ventana.pie.append(el('button', { class: 'btn btn-primary', type: 'button', onclick: () => ventana.cerrar() }, 'Entendido'));
+    }
+
     // ---------- Consultar ----------
     async cargar() {
       try {
         const respuesta = await api(this.url('consultar'));
         this.registros = respuesta.datos;
+        this.actualizarOpcionesFiltros();
         this.render();
       } catch (error) {
         this.cuerpo.replaceChildren(el('tr', {}, el('td', { class: 'empty', colspan: this.columnasTotales }, error.message)));
@@ -137,6 +226,13 @@
       return this.registros.filter((registro) => {
         if (this.filtro === 'activos' && Number(registro.status) !== 1) return false;
         if (this.filtro === 'eliminados' && Number(registro.status) !== 0) return false;
+        if (this.numero && String(registro[this.config.clave]) !== this.numero) return false;
+        for (const filtro of this.config.filtros) {
+          const elegido = this.filtrosActivos?.[filtro.campo];
+          if (!elegido) continue;
+          const valor = String(registro[filtro.campo] ?? '');
+          if (filtro.contiene ? !normalizar(valor).includes(normalizar(elegido)) : valor !== elegido) return false;
+        }
         if (!this.busqueda) return true;
         const texto = this.config.columnas.map((c) => {
           const valor = registro[c.campo];
@@ -495,11 +591,47 @@
         entrada.value = tipo === 'clave' ? '' : valorParaInput(valor, tipo);
       }
 
+      // control: lo que se ve; entrada sigue siendo el valor que se envía y se valida.
+      let control = entrada;
+      let obtenerValor = () => entrada.value.trim();
+      let ponerValor = (nuevo) => { entrada.value = valorParaInput(nuevo, tipo); };
+
+      if (tipo === 'cedula') {
+        // Nacionalidad en un select y solo los dígitos en el campo: se guarda como V-12345678.
+        const prefijo = el('select', { class: 'cedula-prefijo', disabled: bloqueado, 'aria-label': `Nacionalidad de ${def.etiqueta}` },
+          el('option', { value: 'V' }, 'V'), el('option', { value: 'E' }, 'E'));
+        Object.assign(entrada, { inputMode: 'numeric', maxLength: 9, pattern: '\\d{6,9}', placeholder: '12345678', title: 'Entre 6 y 9 dígitos' });
+        ponerValor = (nuevo) => {
+          const partes = String(nuevo ?? '').toUpperCase().match(/^([VE])?-?(\d*)$/) || [];
+          prefijo.value = partes[1] || 'V';
+          entrada.value = partes[2] || '';
+        };
+        ponerValor(valor);
+        entrada.addEventListener('input', () => { entrada.value = entrada.value.replace(/\D/g, ''); });
+        obtenerValor = () => (entrada.value.trim() ? `${prefijo.value}-${entrada.value.trim()}` : '');
+        control = el('div', { class: 'cedula-group' }, prefijo, entrada);
+      } else if (tipo === 'dias') {
+        // Días de la semana como casillas; se guardan como texto «Lunes, Miércoles».
+        const marcados = new Set(String(valor ?? '').split(/\s*(?:,|\by\b)\s*/i).map((d) => d.trim()).filter(Boolean)
+          .map((d) => DIAS.find((dia) => normalizar(dia) === normalizar(d))).filter(Boolean));
+        const casillas = DIAS.map((dia) => {
+          const casilla = el('input', { type: 'checkbox', value: dia, disabled: bloqueado });
+          casilla.checked = marcados.has(dia);
+          casilla.addEventListener('change', () => { entrada.value = obtenerValor(); });
+          return el('label', { class: 'day-chip' }, casilla, el('span', {}, dia.slice(0, 3)));
+        });
+        entrada = el('input', { type: 'hidden', id: idCampo, name: campo });
+        obtenerValor = () => casillas.map((c) => c.querySelector('input')).filter((c) => c.checked).map((c) => c.value).join(', ');
+        ponerValor = () => {};
+        entrada.value = obtenerValor();
+        control = el('div', { class: 'day-picker', role: 'group', 'aria-label': def.etiqueta }, ...casillas, entrada);
+      }
+
       const error = el('small', { class: 'field-error', hidden: true });
       let contenedor;
       if (compacto) {
         entrada.setAttribute('aria-label', def.etiqueta);
-        contenedor = el('div', { class: 'field' }, entrada, error);
+        contenedor = el('div', { class: 'field' }, control, error);
       } else if (tipo === 'booleano') {
         contenedor = el('div', { class: `field check-field${def.ancho === 'completo' ? ' full' : ''}` },
           entrada, el('label', { for: idCampo }, def.etiqueta), def.ayuda ? el('small', { class: 'field-help' }, def.ayuda) : null);
@@ -507,7 +639,7 @@
         const ancho = def.ancho === 'completo' || tipo === 'textoLargo' ? ' full' : '';
         contenedor = el('div', { class: `field${ancho}` },
           el('label', { for: idCampo }, def.etiqueta, requerido ? el('span', { class: 'req' }, ' *') : null),
-          entrada,
+          control,
           def.ayuda && modo !== 'ver' ? el('small', { class: 'field-help' }, def.ayuda) : null,
           error);
       }
@@ -516,8 +648,8 @@
         def,
         entrada,
         contenedor,
-        obtener: () => (tipo === 'booleano' ? (entrada.checked ? 1 : 0) : entrada.value.trim()),
-        poner: (nuevo) => { entrada.value = valorParaInput(nuevo, tipo); entrada.dispatchEvent(new Event('input', { bubbles: true })); },
+        obtener: () => (tipo === 'booleano' ? (entrada.checked ? 1 : 0) : obtenerValor()),
+        poner: (nuevo) => { ponerValor(nuevo); entrada.dispatchEvent(new Event('input', { bubbles: true })); },
         enfocar: () => entrada.focus(),
         validar: () => {
           if (bloqueado) return true;
