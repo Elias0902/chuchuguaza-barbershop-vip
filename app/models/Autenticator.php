@@ -103,8 +103,9 @@ class Autenticator extends BaseModel
         $this->registrarBitacora('Seguridad', 'Inicio de sesión', "El usuario $usuario inició sesión en el sistema interno.", $idUsuario);
     }
 
-    public function registrarCierreSesion(int $idUsuario, string $usuario): void
+    public function registrarCierreSesion(int $idUsuario, string $usuario, string $motivo = 'manual'): void
     {
-        $this->registrarBitacora('Seguridad', 'Cierre de sesión', "El usuario $usuario cerró sesión en el sistema interno.", $idUsuario);
+        $detalle = ['inactividad' => ' por inactividad', 'salida' => ' al volver a la página de acceso'][$motivo] ?? '';
+        $this->registrarBitacora('Seguridad', 'Cierre de sesión', "El usuario $usuario cerró sesión en el sistema interno$detalle.", $idUsuario);
     }
 }

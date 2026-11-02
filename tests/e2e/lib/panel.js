@@ -10,6 +10,7 @@ import edge from 'selenium-webdriver/edge.js';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { config } from './config.js';
+import { leerCodigo2fa } from './codigo2fa.js';
 
 // ---------------------------------------------------------------- datos únicos y fechas
 
@@ -87,7 +88,14 @@ export class Panel {
     await this.driver.get(`${config.urlBase}/index.php?url=autenticator&action=acceso_interno`);
     await this.escribir(await this.esperar(By.name('username')), usuario);
     await this.escribir(await this.esperar(By.name('password')), clave);
+    const desde = Date.now();
     await this.clic(await this.driver.findElement(By.css('form button[type="submit"]')));
+    // El administrador tiene verificación en dos pasos: se lee el código del correo local.
+    await this.driver.wait(async () => /url=dashboard|action=verificar/.test(await this.driver.getCurrentUrl()), config.espera).catch(() => {});
+    if ((await this.driver.getCurrentUrl()).includes('action=verificar')) {
+      await this.escribir(await this.esperar(By.name('codigo')), await leerCodigo2fa(desde));
+      await this.clic(await this.driver.findElement(By.css('form[action*="confirmar_codigo"] button')));
+    }
     await this.driver.wait(until.urlContains('url=dashboard'), config.espera,
       'No se pudo iniciar sesión: revisa TEST_USUARIO y TEST_CLAVE en tests/e2e/.env');
   }

@@ -1,4 +1,14 @@
 RewriteEngine On
+Options -Indexes
+
+# ============================================================
+# SEGURIDAD: solo se publican index.php, assets/, landing-chuchuguaza/ y cache_assets/.
+# Código, configuración, respaldos, pruebas y credenciales devuelven 403 aunque se
+# escriba la ruta exacta (se mira la petición original para no romper las reescrituras).
+# ============================================================
+RewriteCond %{THE_REQUEST} \s/+(?:[^/\s?]+/+)*?(?:app|bd|config|docs|storage|tests|vendor|\.git)(?:/|\s|\?) [NC,OR]
+RewriteCond %{THE_REQUEST} \s/[^\s?]*/(?:\.[^/\s?]+|composer\.(?:json|lock|phar)|credenciales-locales\.txt|README\.md|LICENSE)(?:\s|\?) [NC]
+RewriteRule ^ - [F,L]
 # (sin RewriteBase: las sustituciones se resuelven relativas a esta carpeta,
 #  así el proyecto funciona igual en /chuchuguaza-barber-shop o en la raíz)
 

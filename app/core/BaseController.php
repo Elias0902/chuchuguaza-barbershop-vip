@@ -149,7 +149,7 @@ abstract class BaseController
         }
         $token = $_SERVER['HTTP_X_CSRF_TOKEN'] ?? ($_POST['csrf_token'] ?? null);
         if (!$this->csrfValido($token)) {
-            $this->responderJson(['ok' => false, 'mensaje' => 'La sesión del formulario venció. Recarga la página.'], 419);
+            $this->responderJson(['ok' => false, 'mensaje' => 'La sesión del formulario venció. Recarga la página.'], 403);
         }
     }
 

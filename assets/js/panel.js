@@ -30,6 +30,7 @@
 
   /** Petición al servidor. Lanza Error con .campo si la respuesta no es correcta. */
   async function api(url, { metodo = 'GET', datos = null, formulario = null } = {}) {
+    document.dispatchEvent(new Event('panel:peticion')); // cuenta como actividad para el cierre por inactividad
     const opciones = { method: metodo, credentials: 'same-origin', headers: { Accept: 'application/json' } };
     if (metodo !== 'GET') {
       opciones.headers['X-CSRF-Token'] = csrf;
@@ -176,10 +177,57 @@
     pintar();
   }
 
+  // ---------- Cierre por inactividad ----------
+  /**
+   * El servidor cierra la sesión si no recibe peticiones en el plazo; aquí solo:
+   * 1) avisamos «sigo aquí» (como mucho cada 30 s) cuando la persona usa el ratón o el teclado,
+   * 2) mostramos un aviso 20 s antes y 3) llevamos al acceso cuando se cumple el plazo.
+   */
+  function iniciarInactividad() {
+    const limite = Number(document.querySelector('meta[name="inactividad"]')?.content || 0) * 1000;
+    if (!limite) return;
+    const AVISO = 20000;
+    let ultimaActividad = Date.now();
+    let ultimoPing = Date.now();
+    let aviso = null;
+
+    const salir = () => { window.location.href = 'index.php?url=autenticator&action=acceso_interno'; };
+    const ping = () => {
+      ultimoPing = Date.now();
+      fetch('index.php?url=autenticator&action=ping', { credentials: 'same-origin', headers: { Accept: 'application/json' } })
+        .then((r) => r.json()).then((r) => { if (!r.ok) salir(); }).catch(() => {});
+    };
+    const actividad = () => {
+      ultimaActividad = Date.now();
+      if (aviso) return; // con el aviso abierto hay que pulsar «Seguir conectado»
+      if (Date.now() - ultimoPing > 30000) ping();
+    };
+    document.addEventListener('panel:peticion', () => { ultimoPing = Date.now(); });
+    ['mousemove', 'mousedown', 'keydown', 'scroll', 'touchstart', 'wheel'].forEach((evento) => document.addEventListener(evento, actividad, { passive: true }));
+
+    setInterval(() => {
+      const inactivo = Date.now() - ultimaActividad;
+      const sinPing = Date.now() - ultimoPing;
+      if (sinPing >= limite) salir();
+      else if (inactivo >= limite - AVISO && !aviso) {
+        let respuesta = false;
+        aviso = modal({ titulo: 'Tu sesión está por cerrarse', tamano: 'modal-sm', alCerrar: () => { aviso = null; if (respuesta) { ultimaActividad = Date.now(); ping(); } } });
+        const cuenta = el('strong', {}, '20');
+        aviso.cuerpo.append(el('p', {}, 'Por seguridad, la sesión se cierra tras ', String(limite / 60000), ' minutos sin actividad. Se cerrará en ', cuenta, ' segundos.'));
+        aviso.cuenta = cuenta;
+        aviso.pie.append(
+          el('button', { class: 'btn btn-secondary', type: 'button', onclick: salir }, 'Salir'),
+          el('button', { class: 'btn btn-primary', type: 'button', onclick: () => { respuesta = true; aviso.cerrar(); } }, 'Seguir conectado'));
+      }
+      if (aviso?.cuenta) aviso.cuenta.textContent = String(Math.max(0, Math.ceil((limite - sinPing) / 1000)));
+    }, 1000);
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
     iniciarSidebar();
     iniciarDropdowns();
     iniciarTema();
+    iniciarInactividad();
   });
 
   window.Panel = { el, icono, api, aviso, modal, confirmar, csrf };

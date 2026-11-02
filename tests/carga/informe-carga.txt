@@ -1,0 +1,38 @@
+INFORME DE CARGA Y ESTRÉS · CHUCHUGUAZA
+Fecha: 2/11/2026, 2:27:01 p. m.   Sistema: http://127.0.0.1/chuchuguaza-barber-shop   Herramienta: Apache Bench
+Equipo: XAMPP local (servidor y pruebas en la misma computadora; en un servidor real los números cambian).
+
+1) CARGA (uso normal)
+  Página principal (estática)                50 usuarios    934.1 pet/s  media    54 ms  p95    67 ms  máx    77 ms  fallas 0/1000
+  Formulario de acceso (PHP)                 20 usuarios    112.6 pet/s  media   178 ms  p95   217 ms  máx  1125 ms  fallas 0/500
+  Políticas públicas (PHP + BD)              20 usuarios    155.7 pet/s  media   128 ms  p95   181 ms  máx  1276 ms  fallas 0/500
+  Inicio del panel (con sesión)              10 usuarios     28.1 pet/s  media   355 ms  p95   489 ms  máx   573 ms  fallas 0/300
+  Listado de pagos JSON (con sesión)         10 usuarios     42.3 pet/s  media   236 ms  p95   346 ms  máx   456 ms  fallas 0/300
+  Listado de tickets JSON (con sesión)       10 usuarios     34.5 pet/s  media   290 ms  p95   352 ms  máx   386 ms  fallas 0/300
+
+2) ESTRÉS (listado de pagos, ~300 registros, con sesión)
+  Listado de pagos JSON (con sesión)         10 usuarios     46.1 pet/s  media   217 ms  p95   258 ms  máx   266 ms  fallas 0/100
+  Listado de pagos JSON (con sesión)         25 usuarios     45.0 pet/s  media   556 ms  p95   604 ms  máx   622 ms  fallas 0/250
+  Listado de pagos JSON (con sesión)         50 usuarios     41.8 pet/s  media  1197 ms  p95  1592 ms  máx  1689 ms  fallas 0/500
+  Listado de pagos JSON (con sesión)        100 usuarios     43.4 pet/s  media  2305 ms  p95  2451 ms  máx  2497 ms  fallas 0/1000
+  Listado de pagos JSON (con sesión)        150 usuarios     43.8 pet/s  media  3424 ms  p95  3903 ms  máx  3974 ms  fallas 0/1500
+  Listado de pagos JSON (con sesión)        200 usuarios     40.8 pet/s  media  4902 ms  p95  5587 ms  máx  5673 ms  fallas 0/2000
+  Listado de pagos JSON (con sesión)        300 usuarios     39.9 pet/s  media  7517 ms  p95  8525 ms  máx  8653 ms  fallas 0/3000
+  Listado de pagos JSON (con sesión)        400 usuarios     39.6 pet/s  media 10111 ms  p95 10631 ms  máx 10864 ms  fallas 0/4000
+  Listado de pagos JSON (con sesión)        600 usuarios     37.6 pet/s  media 15971 ms  p95 18771 ms  máx 19339 ms  fallas 0/6000
+
+Se pone lento (más de 3 s para el 5 % más lento) desde 150 usuarios simultáneos.
+Sin fallas hasta 600 usuarios simultáneos (no se alcanzó el límite).
+Referencia: una barbería usa el sistema con 2 a 6 personas a la vez.
+
+3) LÍMITE DEL SERVIDOR (políticas públicas: PHP + base de datos, sin sesión)
+   Cada usuario real tiene su propia sesión. En la ronda 2 todas las peticiones compartían
+   una sola sesión y PHP atiende una sesión a la vez, por eso allí el ritmo queda fijo
+   en unas 40 peticiones por segundo.
+     100 usuarios simultáneos   163 pet/s   media  0,6 s   p95  0,7 s   0 fallas de 500
+     300 usuarios simultáneos   130 pet/s   media  2,3 s   p95  2,6 s   0 fallas de 1500
+     600 usuarios simultáneos   125 pet/s   media  4,8 s   p95  5,5 s   0 fallas de 3000
+    1000 usuarios simultáneos    77 pet/s   media 12,9 s   p95 14,6 s   1 falla de 5000
+   Límite: en esta computadora el sistema aguanta unos 600 usuarios simultáneos sin errores.
+   Desde unos 1000 empieza a fallar y el rendimiento baja a la mitad (el cuello de botella es
+   Apache con sus 150 hilos y MySQL con 151 conexiones). Con 300 o más usuarios ya tarda más de 2 s.
